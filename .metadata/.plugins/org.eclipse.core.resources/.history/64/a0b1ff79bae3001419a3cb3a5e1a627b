@@ -31,7 +31,7 @@ public class MongoDBQuery extends Query {
 	    	  // To connect to mongodb server
 	         client = new MongoClient( "localhost" , 27017 );
 	         
-	         // Now use the employee database
+	         // Now use your databases
 	         employeeDB = client.getDB( "employees" );
 	      }
 	      catch (Exception e)

@@ -6,7 +6,7 @@ package performance;
  * @author Sharmeen Jahan
  * @author Drew Whittaker
  * 
- * Abstract class for timing database queries
+ * Abstract class for handling database queries
  *
  */
 public abstract class Query {
@@ -17,8 +17,5 @@ public abstract class Query {
 	 */
 	public void run(){}
 	
-	/**
-	 * Intialize connection to database server.
-	 */
 	public void initConnection(){}
 }

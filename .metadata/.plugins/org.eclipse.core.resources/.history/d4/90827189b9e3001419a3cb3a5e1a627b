@@ -19,15 +19,11 @@ public class MySQLQuery extends Query {
 		initConnection();
 	}
 	
-	/**
-	 * Initialize connection to MySQL server and
-	 * begin using the employee database.
-	 */
 	public void initConnection(){
 		try{
-			//String url = "jdbc:mysql://localhost/";
-			//String dbName = "employees";
-			//String driver = "com.mysql.jdbc.Driver";
+			String url = "jdbc:mysql://localhost/";
+			String dbName = "employees";
+			String driver = "com.mysql.jdbc.Driver";
 			try {
 				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/employees?user=root&password=mysql");
 			} 

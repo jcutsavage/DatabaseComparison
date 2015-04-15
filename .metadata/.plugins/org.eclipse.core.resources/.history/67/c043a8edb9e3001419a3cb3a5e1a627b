@@ -36,9 +36,9 @@ public class Converter {
 	*/
 	public void initSQLConnection(){
 		try{
-			//String url = "jdbc:mysql://localhost/";
-			//String dbName = "employees";
-			//String driver = "com.mysql.jdbc.Driver";
+			String url = "jdbc:mysql://localhost/";
+			String dbName = "employees";
+			String driver = "com.mysql.jdbc.Driver";
 			try {
 				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/employees?user=root&password=mysql");
 			} 

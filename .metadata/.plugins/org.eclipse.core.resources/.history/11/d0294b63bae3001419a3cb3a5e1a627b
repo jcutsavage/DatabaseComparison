@@ -17,7 +17,6 @@ import com.mongodb.MongoClient;
 public class MongoDBQuery extends Query {
 	
 	private MongoClient client;
-	private DB employeeDB;
 	
 	public void run(){
 		initConnection();
@@ -27,16 +26,6 @@ public class MongoDBQuery extends Query {
 	 * Sets up the connection to Mongo server
 	 */
 	public void initConnection(){
-		try{   
-	    	  // To connect to mongodb server
-	         client = new MongoClient( "localhost" , 27017 );
-	         
-	         // Now use the employee database
-	         employeeDB = client.getDB( "employees" );
-	      }
-	      catch (Exception e)
-	      {
-	    	  System.out.println(e.getMessage());
-	      }
+		
 	}
 }
