@@ -1,0 +1,17 @@
+package performance;
+
+/**
+ * 
+ * @author John Cutsavage
+ * @author Sharmeen Jahan
+ * @author Drew Whittaker
+ *
+ */
+public abstract class Query {
+	
+	/**
+	 * Execute query and print out the resulting
+	 * table
+	 */
+	public void run(){}
+}
