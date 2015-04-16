@@ -30,7 +30,7 @@ public class MySQLQuery extends Query {
 			//String dbName = "employees";
 			//String driver = "com.mysql.jdbc.Driver";
 			try {
-				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/employees?user=root&password=password");
+				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/employees?user=root&password=mysql");
 			} 
 			catch (Exception e) {
 				e.printStackTrace();
@@ -45,13 +45,11 @@ public class MySQLQuery extends Query {
 	public void executeQuery(){
 		try {
 			Statement stmt = con.createStatement();
-			String useEmployees = "USE employees;";
-			stmt.executeUpdate(useEmployees);
 			
 			long startTime = System.currentTimeMillis();
 			
 			String query = "SELECT dept_name FROM departments";
-			stmt.executeQuery(query);
+			stmt.executeUpdate(query);
 			
 			long endTime = System.currentTimeMillis();
 			

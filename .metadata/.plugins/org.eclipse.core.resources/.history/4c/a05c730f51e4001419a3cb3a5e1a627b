@@ -46,12 +46,12 @@ public class MySQLQuery extends Query {
 		try {
 			Statement stmt = con.createStatement();
 			String useEmployees = "USE employees;";
-			stmt.executeUpdate(useEmployees);
+			stmt.executeQuery(useEmployees);
 			
 			long startTime = System.currentTimeMillis();
 			
 			String query = "SELECT dept_name FROM departments";
-			stmt.executeQuery(query);
+			stmt.executeUpdate(query);
 			
 			long endTime = System.currentTimeMillis();
 			
