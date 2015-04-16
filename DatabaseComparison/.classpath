@@ -5,5 +5,12 @@
 	<classpathentry kind="lib" path="/home/john/Downloads/mongo-java-driver-2.13.0.jar"/>
 	<classpathentry kind="lib" path="/home/john/Downloads/mongo-java-driver-2.13.0-javadoc.jar"/>
 	<classpathentry kind="lib" path="/home/john/Downloads/mongo-java-driver-2.13.0-sources.jar"/>
+	<classpathentry kind="lib" path="/home/john/Downloads/ojdbc7.jar"/>
+	<classpathentry kind="lib" path="/home/john/Downloads/ojdbc7dms.jar"/>
+	<classpathentry kind="lib" path="/home/john/Downloads/ojdbc7dms_g.jar"/>
+	<classpathentry kind="lib" path="/home/john/Downloads/ojdbc7_g.jar"/>
+	<classpathentry kind="lib" path="/home/john/Downloads/mysql-connector-java-3.0.17-ga/lib/jdbc2_0-stdext.jar"/>
+	<classpathentry kind="lib" path="/home/john/Downloads/mysql-connector-java-3.0.17-ga/lib/jta-spec1_0_1.jar"/>
+	<classpathentry kind="lib" path="/home/john/Downloads/mysql-connector-java-5.1.35/mysql-connector-java-5.1.35-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

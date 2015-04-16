@@ -21,4 +21,9 @@ public abstract class Query {
 	 * Intialize connection to database server.
 	 */
 	public void initConnection(){}
+	
+	/**
+	 * Execute a specific query in the database.
+	 */
+	public void executeQuery(){}
 }

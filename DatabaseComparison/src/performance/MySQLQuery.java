@@ -17,6 +17,7 @@ public class MySQLQuery extends Query {
 	
 	public void run(){
 		initConnection();
+		executeQuery();
 	}
 	
 	/**
@@ -36,5 +37,28 @@ public class MySQLQuery extends Query {
 			}	  
 		   } 
 		finally{}
+	}
+	
+	/**
+	 * Execute a specific query in the database.
+	 */
+	public void executeQuery(){
+		try {
+			Statement stmt = con.createStatement();
+			
+			long startTime = System.currentTimeMillis();
+			
+			String query = "SELECT dept_name FROM departments";
+			stmt.executeUpdate(query);
+			
+			long endTime = System.currentTimeMillis();
+			
+			long totalTime = endTime - startTime;
+			
+			System.out.println("Total time to execute query: " + totalTime + " milliseconds");
+			}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

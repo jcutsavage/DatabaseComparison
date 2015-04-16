@@ -21,6 +21,7 @@ public class MongoDBQuery extends Query {
 	
 	public void run(){
 		initConnection();
+		executeQuery();
 	}
 	
 	/**
@@ -38,5 +39,12 @@ public class MongoDBQuery extends Query {
 	      {
 	    	  System.out.println(e.getMessage());
 	      }
+	}
+	
+	/**
+	 * Execute a specific query in the database.
+	 */
+	public void executeQuery(){
+		
 	}
 }
