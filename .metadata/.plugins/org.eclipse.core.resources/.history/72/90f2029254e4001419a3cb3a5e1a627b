@@ -370,7 +370,6 @@ public class Converter {
 	*/
 	public void removeDB(){
 		try {
-			mongoClient = new MongoClient( "localhost" , 27017 );
 			db = mongoClient.getDB( "employees" );
 			db.dropDatabase();
 		}
