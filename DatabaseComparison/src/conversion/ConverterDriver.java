@@ -19,5 +19,6 @@ public class ConverterDriver {
 		
 		employeeConverter.copyDepartments();
 		employeeConverter.copyEmployees();
+		System.out.println("Conversion finished");
 	}
 }

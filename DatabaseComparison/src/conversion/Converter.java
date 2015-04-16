@@ -79,6 +79,7 @@ public class Converter {
 	*/
 	public void copyDepartments(){
 		try {
+			System.out.println("Copying departments");
 			// Run a select query of all entries in departments table from MySQL
 			Statement statement = con.createStatement();
 			ResultSet res = statement.executeQuery("SELECT * FROM departments");
@@ -105,6 +106,7 @@ public class Converter {
 			res.close();
 			res = null;
 			copyDocument = null;
+			System.out.println("Copying finished");
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -116,6 +118,7 @@ public class Converter {
 	*/
 	public void copyEmployees(){
 		try {
+			System.out.println("Copying employees");
 			// Run a select query of all entries in departments table from MySQL
 			Statement statement = con.createStatement();
 			ResultSet res = statement.executeQuery("SELECT * FROM employees");
@@ -135,9 +138,11 @@ public class Converter {
 			String firstName, lastName;
 			Object gender = null;
 			BasicDBObject copyDocument = new BasicDBObject();
+			//int i = 1;
 		
 			// Iterate through the departments, capture the information, and copy it to MongoDB
 			while(res.next()) {
+				//System.out.println("Copying employee " + i);
 				emp_no = res.getInt("emp_no");
 				birthDate = res.getDate("birth_date");
 				firstName = res.getString("first_name");
@@ -161,11 +166,14 @@ public class Converter {
 				firstName = "";
 				lastName = "";
 				copyDocument.clear();
+				
+				//i++;
 			
 			}
 			copyDocument = null;
 			res.close();
 			res= null;
+			System.out.println("Copying finshed");
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -370,9 +378,11 @@ public class Converter {
 	*/
 	public void removeDB(){
 		try {
+			System.out.println("Removing database");
 			mongoClient = new MongoClient( "localhost" , 27017 );
 			db = mongoClient.getDB( "employees" );
 			db.dropDatabase();
+			System.out.println("Database removed");
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
