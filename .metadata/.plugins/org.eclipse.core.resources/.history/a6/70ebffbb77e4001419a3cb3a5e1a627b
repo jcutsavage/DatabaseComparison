@@ -64,27 +64,17 @@ public class MongoDBQuery extends Query {
 			DBCursor deptName = deptColl.find();
 			
 			while(deptName.hasNext()){
-				DBObject dept = deptName.next();
-				System.out.print("{" + dept.get("dept_name") + ", ");
+				BasicBSONObject dept = (BasicBSONObject) deptName.next();
+				System.out.print("{" + dept.get("dept_name") + " , ");
 				
-				Object deptId = dept.get("_id");
+				Object depNum = dept.getObjectId("dept_no");
 				
-				DBObject mgrQuery = new BasicDBObject();
-				mgrQuery.put("dept_no", deptId);
+				BasicDBObject mgrQuery = new BasicDBObject();
+				mgrQuery.put("dept_no", depNum);
+				
 				DBObject mgr = mgrColl.findOne(mgrQuery);
+				System.out.println(mgr);
 				
-				Object empId = mgr.get("emp_no");
-				DBObject nameQuery = new BasicDBObject();
-				nameQuery.put("_id", empId);
-				DBObject employee = empColl.findOne(nameQuery);
-				
-				System.out.print(employee.get("first_name") + ", " + employee.get("last_name") + ", ");
-				
-				DBObject salaryQuery = new BasicDBObject();
-				salaryQuery.put("emp_no", empId);
-				DBObject salary = salColl.findOne(salaryQuery);
-				
-				System.out.print(salary.get("salary") + "}");
 				
 				System.out.println();
 			}

@@ -80,12 +80,6 @@ public class MongoDBQuery extends Query {
 				
 				System.out.print(employee.get("first_name") + ", " + employee.get("last_name") + ", ");
 				
-				DBObject salaryQuery = new BasicDBObject();
-				salaryQuery.put("emp_no", empId);
-				DBObject salary = salColl.findOne(salaryQuery);
-				
-				System.out.print(salary.get("salary") + "}");
-				
 				System.out.println();
 			}
 			

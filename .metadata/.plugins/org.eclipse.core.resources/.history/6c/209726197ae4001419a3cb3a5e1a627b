@@ -73,18 +73,12 @@ public class MongoDBQuery extends Query {
 				mgrQuery.put("dept_no", deptId);
 				DBObject mgr = mgrColl.findOne(mgrQuery);
 				
-				Object empId = mgr.get("emp_no");
+				Object empNo = mgr.get("emp_no");
 				DBObject nameQuery = new BasicDBObject();
-				nameQuery.put("_id", empId);
+				nameQuery.put("emp_no", empNo);
 				DBObject employee = empColl.findOne(nameQuery);
 				
 				System.out.print(employee.get("first_name") + ", " + employee.get("last_name") + ", ");
-				
-				DBObject salaryQuery = new BasicDBObject();
-				salaryQuery.put("emp_no", empId);
-				DBObject salary = salColl.findOne(salaryQuery);
-				
-				System.out.print(salary.get("salary") + "}");
 				
 				System.out.println();
 			}

@@ -1,7 +1,6 @@
 package performance;
 
-import org.bson.types.ObjectId;
-import org.bson.BasicBSONObject;
+import java.sql.Statement;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -59,35 +58,10 @@ public class MongoDBQuery extends Query {
 	public void executeQuery(){
 		try {
 			
+			
 			long startTime = System.currentTimeMillis();
 			
-			DBCursor deptName = deptColl.find();
 			
-			while(deptName.hasNext()){
-				DBObject dept = deptName.next();
-				System.out.print("{" + dept.get("dept_name") + ", ");
-				
-				Object deptId = dept.get("_id");
-				
-				DBObject mgrQuery = new BasicDBObject();
-				mgrQuery.put("dept_no", deptId);
-				DBObject mgr = mgrColl.findOne(mgrQuery);
-				
-				Object empId = mgr.get("emp_no");
-				DBObject nameQuery = new BasicDBObject();
-				nameQuery.put("_id", empId);
-				DBObject employee = empColl.findOne(nameQuery);
-				
-				System.out.print(employee.get("first_name") + ", " + employee.get("last_name") + ", ");
-				
-				DBObject salaryQuery = new BasicDBObject();
-				salaryQuery.put("emp_no", empId);
-				DBObject salary = salColl.findOne(salaryQuery);
-				
-				System.out.print(salary.get("salary") + "}");
-				
-				System.out.println();
-			}
 			
 			long endTime = System.currentTimeMillis();
 			
