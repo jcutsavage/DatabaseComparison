@@ -64,33 +64,26 @@ public class MongoDBQuery extends Query {
 			DBCursor deptName = deptColl.find();
 			
 			while(deptName.hasNext()){
-				
-				// First get the department name
 				DBObject dept = deptName.next();
-				// Print department name
 				System.out.print("{" + dept.get("dept_name") + ", ");
 				
-				// Next get the department's Object ID
 				Object deptId = dept.get("_id");
+				
 				DBObject mgrQuery = new BasicDBObject();
 				mgrQuery.put("dept_no", deptId);
-				// Search for the manager for this department
 				DBObject mgr = mgrColl.findOne(mgrQuery);
 				
-				// Search for the manager's name in the employee collection
 				Object empId = mgr.get("emp_no");
 				DBObject nameQuery = new BasicDBObject();
 				nameQuery.put("_id", empId);
 				DBObject employee = empColl.findOne(nameQuery);
 				
-				// Print the manager's first and last name
 				System.out.print(employee.get("first_name") + ", " + employee.get("last_name") + ", ");
 				
-				// Search the salaries collection using the manager's employee number
 				DBObject salaryQuery = new BasicDBObject();
 				salaryQuery.put("emp_no", empId);
 				DBObject salary = salColl.findOne(salaryQuery);
-				// Print the salary
+				
 				System.out.print(salary.get("salary") + "}");
 				
 				System.out.println();
