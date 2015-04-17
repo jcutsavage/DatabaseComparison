@@ -12,11 +12,9 @@ package performance;
 public class QueryDriver {
 
 	public static void main(String[] args) {
-		Query mysql = new MySQLQuery();
-		mysql.run();
-		
-		Query mongo = new MongoDBQuery();
-		mongo.run();
+		Query sqlQuery= new MysqlQuery();
+		sqlQuery.initSQLConnection();
+		sqlQuery.managerSalaries();
 	}
 
 }
