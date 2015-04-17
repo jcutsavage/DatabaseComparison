@@ -11,19 +11,6 @@ package performance;
  */
 public abstract class Query {
 	
-	/**
-	 * Execute query and print out the resulting
-	 * table
-	 */
-	public void run(){}
-	
-	/**
-	 * Intialize connection to database server.
-	 */
-	public void initConnection(){}
-	
-	/**
-	 * Execute a specific query in the database.
-	 */
-	public void executeQuery(){}
+	public abstract void initSQLConnection();
+	public abstract void managerSalaries();
 }
