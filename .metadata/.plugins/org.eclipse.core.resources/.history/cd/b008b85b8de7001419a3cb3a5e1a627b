@@ -6,7 +6,7 @@ import java.sql.*;
 
 /**
 *
-* @author Drew Whittaker
+*@author Drew Whittaker
 * @author John Cutsavage
 * @author Sharmeen Jahan
 *
@@ -41,7 +41,7 @@ public class MySQLQuery extends Query {
 			String dbName = "employees";
 			String driver = "com.mysql.jdbc.Driver";
 			String userName = "root"; 
-			String password = "password";
+			String password = "mysql";
 			try {
 
 				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/employees?user=root&password=password");

@@ -72,7 +72,7 @@ public class MongoDBQuery extends Query {
 				
 				Object managerId = currentManager.get("emp_no");
 				DBObject idSearch = new BasicDBObject();
-				idSearch.put("_id", managerId);
+				idSearch.put("emp_no", managerId);
 				
 				DBObject employee = empColl.findOne(idSearch);
 				
@@ -80,12 +80,6 @@ public class MongoDBQuery extends Query {
 				managerInfo.put("last_name", employee.get("last_name"));
 				
 				Object deptId = currentManager.get("dept_no");
-				DBObject deptSearch = new BasicDBObject();
-				deptSearch.put("_id", deptId);
-				
-				DBObject department = deptColl.findOne(deptSearch);
-				
-				managerInfo.put("dept_name", department.get("dept_name"));
 				
 				list.add(managerInfo);
 			}
