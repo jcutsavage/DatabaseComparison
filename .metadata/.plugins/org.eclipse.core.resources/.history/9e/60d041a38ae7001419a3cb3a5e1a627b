@@ -22,6 +22,9 @@ public class MySQLQuery extends Query {
 		managerSalaries();
 	}
 
+public class MysqlQuery extends Query {
+	Connection con;
+
 	
 	/**
 	* Creates a new mysql connection on the default host. Provide
@@ -104,7 +107,41 @@ public class MySQLQuery extends Query {
 			
 			//releasing memory.
 			res.close();
-			res = null;	
+			res = null;
+			
+
+			System.out.println("");
+			//printing the column name.
+			ResultSetMetaData rsmd = res.getMetaData();
+			int columnCount = rsmd.getColumnCount();
+			System.out.print(rsmd.getColumnName(1));
+			System.out.print("\t");
+			System.out.print(rsmd.getColumnName(2));
+			System.out.print("\t\t");
+			System.out.print(rsmd.getColumnName(3));
+			System.out.print("\t\t\t");
+			System.out.print(rsmd.getColumnName(4));
+			
+			System.out.println("");
+			System.out.println("");
+			
+			//Printing the values we got from the query.
+			while (res.next()){
+				for (int i=1; i<=columnCount; i++){
+					
+					//System.out.print("\t");
+		            String columnValue= res.getString(i);
+		            System.out.print(columnValue.trim() + "\t\t");
+		            //System.out.print("\t\t");
+		            
+				}
+				System.out.print("\n");
+				
+			}	
+			//releasing memory.
+			res.close();
+			res = null;
+			
 
 		}
 		catch (Exception e) {
