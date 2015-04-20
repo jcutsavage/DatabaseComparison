@@ -12,10 +12,10 @@ package performance;
 public abstract class Query {
 	
 	/**
-	 * Execute queries and print out the resulting
+	 * Execute query and print out the resulting
 	 * table
 	 */
-	public abstract void run();
+	public void run(){}
 	
 	/**
 	 * Intialize connection to database server.
@@ -23,7 +23,7 @@ public abstract class Query {
 	public abstract void initConnection();
 	
 	/**
-	 * List all managers, their departments, and their salaries.
+	 * Execute a specific query in the database.
 	 */
 	public abstract void managerSalaries();
 }

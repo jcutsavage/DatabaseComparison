@@ -80,7 +80,6 @@ public class MySQLQuery extends Query {
 			
 			System.out.println(fields);
 			
-			// Print query result
 			StringBuilder data = new StringBuilder();
 
 			while (res.next()) {

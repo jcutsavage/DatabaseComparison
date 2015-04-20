@@ -71,21 +71,44 @@ public class MySQLQuery extends Query {
 			//printing the column name.
 			ResultSetMetaData rsmd = res.getMetaData();
 			int columnCount = rsmd.getColumnCount();
+			//System.out.print(rsmd.getColumnName(1));
+			//System.out.print("\t");
+			//System.out.print(rsmd.getColumnName(2));
+			//System.out.print("\t\t");
+			//System.out.print(rsmd.getColumnName(3));
+			//System.out.print("\t\t");
+			//System.out.print(rsmd.getColumnName(4));
+			
+			//System.out.println("");
+			//System.out.println("");
+			
+			//Printing the values we got from the query.
+			//while (res.next()){
+				//for (int i=1; i<=columnCount; i++){
+					
+					//System.out.print("\t");
+		            //String columnValue= res.getString(i);
+		            //System.out.print(columnValue.trim() + "\t\t");
+		            //System.out.print("\t\t");
+		            
+				//}
+				//System.out.print("\n");
+				
+			//}	
 			
 			StringBuilder fields = new StringBuilder();
 			
 			for (int i = 1; i <= 4; i++){
-				fields.append(String.format("%-20s", rsmd.getColumnName(i)));
+				fields.append(String.format(rsmd.getColumnName(i)));
 			}
 			
-			System.out.println(fields);
+			System.out.println();
 			
-			// Print query result
 			StringBuilder data = new StringBuilder();
 
 			while (res.next()) {
 			    for (int i = 1; i <= columnCount; i++) {
-			        data.append(String.format("%-20s",res.getString(i)));
+			        data.append(String.format("%-20s",res.getString(i)) + " ");
 			    }
 			    data.append("\n");
 			}

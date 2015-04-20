@@ -79,8 +79,8 @@ public class MySQLQuery extends Query {
 			}
 			
 			System.out.println(fields);
+			System.out.println();
 			
-			// Print query result
 			StringBuilder data = new StringBuilder();
 
 			while (res.next()) {

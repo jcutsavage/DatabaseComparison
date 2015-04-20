@@ -15,11 +15,6 @@ import java.sql.*;
 public class MySQLQuery extends Query {
 	Connection con;
 	
-	public void run(){
-		initConnection();
-		managerSalaries();
-	}
-	
 	/**
 	* Creates a new mysql connection on the default host. Provide
 	* the connection with your username and password to log into MySQL
@@ -36,7 +31,7 @@ public class MySQLQuery extends Query {
 			String userName = "root"; 
 			String password = "mysql";
 			try {
-				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/employees?user=root&password=password");
+				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/employees?user=root&password=mysql");
 				 
 			} catch (Exception e) {
 					  e.printStackTrace();
@@ -67,31 +62,34 @@ public class MySQLQuery extends Query {
 			//time takes to execute query.
 			long runTime = endTime - startTime;
 			System.out.println("Time to execute query:" + runTime + " miliseconds.");
-			System.out.println();
+			System.out.println("");
 			//printing the column name.
 			ResultSetMetaData rsmd = res.getMetaData();
 			int columnCount = rsmd.getColumnCount();
+			System.out.print(rsmd.getColumnName(1));
+			System.out.print("\t");
+			System.out.print(rsmd.getColumnName(2));
+			System.out.print("\t\t");
+			System.out.print(rsmd.getColumnName(3));
+			System.out.print("\t\t\t");
+			System.out.print(rsmd.getColumnName(4));
 			
-			StringBuilder fields = new StringBuilder();
+			System.out.println("");
+			System.out.println("");
 			
-			for (int i = 1; i <= 4; i++){
-				fields.append(String.format("%-20s", rsmd.getColumnName(i)));
-			}
-			
-			System.out.println(fields);
-			
-			// Print query result
-			StringBuilder data = new StringBuilder();
-
-			while (res.next()) {
-			    for (int i = 1; i <= columnCount; i++) {
-			        data.append(String.format("%-20s",res.getString(i)));
-			    }
-			    data.append("\n");
-			}
-			
-			System.out.println(data);
-			
+			//Printing the values we got from the query.
+			while (res.next()){
+				for (int i=1; i<=columnCount; i++){
+					
+					//System.out.print("\t");
+		            String columnValue= res.getString(i);
+		            System.out.print(columnValue.trim() + "\t\t");
+		            //System.out.print("\t\t");
+		            
+				}
+				System.out.print("\n");
+				
+			}	
 			//releasing memory.
 			res.close();
 			res = null;
