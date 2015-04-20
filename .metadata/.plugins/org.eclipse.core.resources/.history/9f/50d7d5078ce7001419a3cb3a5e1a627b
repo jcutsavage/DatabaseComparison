@@ -78,31 +78,14 @@ public class MySQLQuery extends Query {
 			System.out.println("Time to execute query:" + runTime + " miliseconds.");
 
 			System.out.println();
-			
-			// Print the query
-			printQuery(res);
-			
-			//releasing memory.
-			res.close();
-			res = null;	
-
-		}
-		catch (Exception e) {
-		e.printStackTrace();
-		}
-	}
-	
-	public void printQuery(ResultSet res){
-		try{
+			//printing the column name.
 			ResultSetMetaData rsmd = res.getMetaData();
 			int columnCount = rsmd.getColumnCount();
 			
-			
-			// Print column names
 			StringBuilder fields = new StringBuilder();
 			
-			for (int i = 1; i <= columnCount; i++){
-				fields.append(String.format("%-20s", rsmd.getColumnName(i)) + " ");
+			for (int i = 1; i <= 4; i++){
+				fields.append(String.format("%-20s", rsmd.getColumnName(i)));
 			}
 			
 			System.out.println(fields);
@@ -112,17 +95,21 @@ public class MySQLQuery extends Query {
 
 			while (res.next()) {
 			    for (int i = 1; i <= columnCount; i++) {
-			        data.append(String.format("%-20s",res.getString(i)) + "|");
+			        data.append(String.format("%-20s",res.getString(i)));
 			    }
 			    data.append("\n");
 			}
 			
 			System.out.println(data);
+			
+			//releasing memory.
+			res.close();
+			res = null;	
+
 		}
-		catch (Exception e){
-			e.printStackTrace();
+		catch (Exception e) {
+		e.printStackTrace();
 		}
-		
 	}
 			
 }

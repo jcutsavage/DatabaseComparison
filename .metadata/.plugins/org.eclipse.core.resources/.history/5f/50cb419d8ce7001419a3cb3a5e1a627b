@@ -102,7 +102,7 @@ public class MySQLQuery extends Query {
 			StringBuilder fields = new StringBuilder();
 			
 			for (int i = 1; i <= columnCount; i++){
-				fields.append(String.format("%-20s", rsmd.getColumnName(i)) + " ");
+				fields.append(String.format("%-20s", rsmd.getColumnName(i)) + "|");
 			}
 			
 			System.out.println(fields);
