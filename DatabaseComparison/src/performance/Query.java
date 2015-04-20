@@ -11,6 +11,7 @@ package performance;
  */
 public abstract class Query {
 	
+<<<<<<< HEAD
 	/**
 	 * Execute queries and print out the resulting
 	 * table
@@ -25,5 +26,8 @@ public abstract class Query {
 	/**
 	 * List all managers, their departments, and their salaries.
 	 */
+=======
+	public abstract void initSQLConnection();
+>>>>>>> 3fc510ffa629c281c939621fd3099601e37a0ad7
 	public abstract void managerSalaries();
 }

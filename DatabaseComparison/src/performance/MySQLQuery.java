@@ -1,3 +1,4 @@
+
 package performance;
 
 
@@ -12,6 +13,7 @@ import java.sql.*;
 * This class is the subclass of Query which implements all queries of mysql.
 *
 **/
+<<<<<<< HEAD
 public class MySQLQuery extends Query {
 	Connection con;
 	
@@ -19,6 +21,10 @@ public class MySQLQuery extends Query {
 		initConnection();
 		managerSalaries();
 	}
+=======
+public class MysqlQuery extends Query {
+	Connection con;
+>>>>>>> 3fc510ffa629c281c939621fd3099601e37a0ad7
 	
 	/**
 	* Creates a new mysql connection on the default host. Provide
@@ -28,7 +34,11 @@ public class MySQLQuery extends Query {
 	* @param password: The user's password.
 	*
 	*/
+<<<<<<< HEAD
 	public void initConnection(){
+=======
+	public void initSQLConnection(){
+>>>>>>> 3fc510ffa629c281c939621fd3099601e37a0ad7
 		try {
 			String url = "jdbc:mysql://localhost/";
 			String dbName = "employees";
@@ -36,7 +46,11 @@ public class MySQLQuery extends Query {
 			String userName = "root"; 
 			String password = "mysql";
 			try {
+<<<<<<< HEAD
 				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/employees?user=root&password=password");
+=======
+				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/employees?user=root&password=mysql");
+>>>>>>> 3fc510ffa629c281c939621fd3099601e37a0ad7
 				 
 			} catch (Exception e) {
 					  e.printStackTrace();
@@ -67,6 +81,7 @@ public class MySQLQuery extends Query {
 			//time takes to execute query.
 			long runTime = endTime - startTime;
 			System.out.println("Time to execute query:" + runTime + " miliseconds.");
+<<<<<<< HEAD
 			System.out.println();
 			//printing the column name.
 			ResultSetMetaData rsmd = res.getMetaData();
@@ -96,6 +111,40 @@ public class MySQLQuery extends Query {
 			res.close();
 			res = null;
 			
+=======
+			System.out.println("");
+			//printing the column name.
+			ResultSetMetaData rsmd = res.getMetaData();
+			int columnCount = rsmd.getColumnCount();
+			System.out.print(rsmd.getColumnName(1));
+			System.out.print("\t");
+			System.out.print(rsmd.getColumnName(2));
+			System.out.print("\t\t");
+			System.out.print(rsmd.getColumnName(3));
+			System.out.print("\t\t\t");
+			System.out.print(rsmd.getColumnName(4));
+			
+			System.out.println("");
+			System.out.println("");
+			
+			//Printing the values we got from the query.
+			while (res.next()){
+				for (int i=1; i<=columnCount; i++){
+					
+					//System.out.print("\t");
+		            String columnValue= res.getString(i);
+		            System.out.print(columnValue.trim() + "\t\t");
+		            //System.out.print("\t\t");
+		            
+				}
+				System.out.print("\n");
+				
+			}	
+			//releasing memory.
+			res.close();
+			res = null;
+			
+>>>>>>> 3fc510ffa629c281c939621fd3099601e37a0ad7
 		}
 		catch (Exception e) {
 		e.printStackTrace();
