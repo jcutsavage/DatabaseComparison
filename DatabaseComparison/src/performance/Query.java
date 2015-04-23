@@ -28,8 +28,4 @@ public abstract class Query {
 	public abstract void managerSalaries();
 	
 	
-	
-	public void executeQuery(){}
-	public abstract void initConnection();
-	public abstract void managerSalaries();
 }
