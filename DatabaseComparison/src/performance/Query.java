@@ -26,4 +26,10 @@ public abstract class Query {
 	 * List all managers, their departments, and their salaries.
 	 */
 	public abstract void managerSalaries();
+	
+	
+	
+	public void executeQuery(){}
+	public abstract void initConnection();
+	public abstract void managerSalaries();
 }
