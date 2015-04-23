@@ -18,7 +18,7 @@ import com.mongodb.Mongo;
 public class MongoQuery extends Query{
 	MongoClient mongoClient;
 	DB db;
-	DBCollection dColl, dmColl, deColl, eColl, sColl, tColl,jColl,rColl ;	//collection variable to get the tables from database.
+	DBCollection dColl, dmColl, deColl, eColl, sColl, tColl,rColl ;	//collection variable to get the tables from database.
 
 	//Initialize the connection and get the database from mongodb instance.
 	public void initConnection(){
@@ -36,9 +36,6 @@ public class MongoQuery extends Query{
 			eColl = db.getCollection("employees");
 			sColl = db.getCollection("salaries");
 			tColl = db.getCollection("titles");
-			jColl=db.getCollection("joined");
-			jColl.drop();
-			jColl=db.getCollection("joined");//create new one
 			rColl=db.getCollection("result");
 			rColl.drop();
 			rColl=db.getCollection("result");
