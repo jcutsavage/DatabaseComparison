@@ -67,9 +67,9 @@ public class MySQLQuery extends Query {
 			//query to find the first_name, last_name, department name and current salary of each manager.
 			ResultSet res = statement.executeQuery("select employees.first_name, employees.last_name,"
 					+ " departments.dept_name,salaries.salary from dept_manager "
-					+ "inner join departments on departments.dept_no=dept_manager.dept_no inner join salaries "
-					+ "on dept_manager.emp_no=salaries.emp_no inner join employees on employees.emp_no= dept_manager.emp_no"
-					+ " where salaries.to_date= (select max(to_date) from salaries where salaries.emp_no= dept_manager.emp_no)");
+					+ "inner join departments on departments.dept_no= dept_manager.dept_no inner join salaries "
+					+ "on dept_manager.emp_no=salaries.emp_no and dept_manager.to_date= salaries.to_date inner join employees on employees.emp_no= dept_manager.emp_no"
+					+ " where dept_manager.to_date= (select max(to_date) from dept_manager d2 where d2.dept_no= dept_manager.dept_no)");
 
 			//taking the time after executing query.
 			long endTime = System.currentTimeMillis();
