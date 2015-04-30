@@ -329,7 +329,7 @@ public class Converter {
 	*/
 	public void copySalary(int empNum, ObjectId id){
 		try {
-			String salary;	
+			int salary;	
 			BasicDBObject copyDocument = new BasicDBObject();
 			
 			
@@ -338,7 +338,7 @@ public class Converter {
 			ResultSet res = statement.executeQuery("SELECT * FROM salaries WHERE emp_no = " + Integer.toString(empNum) );
 			
 			while(res.next()){
-				salary = res.getString("salary");
+				salary = res.getInt("salary");
 				Date from = res.getDate("from_date");
 				Date to = res.getDate("to_date");
 				
@@ -350,7 +350,6 @@ public class Converter {
 				sColl.insert(copyDocument);
 				
 				copyDocument.clear();
-				salary = "";
 				
 			}
 			copyDocument=null;
