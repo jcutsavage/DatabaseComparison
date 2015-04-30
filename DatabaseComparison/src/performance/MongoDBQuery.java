@@ -15,16 +15,23 @@ import com.mongodb.Mongo;
 
 
 
+<<<<<<< HEAD
 public class MongoDBQuery extends Query{
+=======
+public class MongoQuery extends Query{
+>>>>>>> f2217182a271732870caedd215fc088f22972d56
 	MongoClient mongoClient;
 	DB db;
 	DBCollection dColl, dmColl, deColl, eColl, sColl, tColl,rColl ;	//collection variable to get the tables from database.
 
+<<<<<<< HEAD
 	public void run(){
 		initConnection();
 		managerSalaries();
 	}
 	
+=======
+>>>>>>> f2217182a271732870caedd215fc088f22972d56
 	//Initialize the connection and get the database from mongodb instance.
 	public void initConnection(){
 		try{   
@@ -139,4 +146,4 @@ public class MongoDBQuery extends Query{
 			System.out.println(salary.get("_id"));
 		}
 	}
-}
+

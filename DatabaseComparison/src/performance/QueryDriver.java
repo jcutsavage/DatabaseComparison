@@ -16,8 +16,14 @@ public class QueryDriver {
 		Query mysql = new MySQLQuery();
 		mysql.run();
 		
-		Query mongo = new MongoDBQuery();
-		mongo.run();
+		//Query mongo = new MongoDBQuery();
+		//mongo.run();
+	
+	   	Query mongoQuery= new MongoQuery();
+		mongoQuery.initConnection();
+	   	mongoQuery.managerSalaries();
+	   
 	}
+	
 
 }
