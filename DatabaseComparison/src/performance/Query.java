@@ -22,10 +22,15 @@ public abstract class Query {
 	 */
 	public abstract void initConnection();
 	
-	/**
-	 * List all managers, their departments, and their salaries.
-	 */
-	public abstract void managerSalaries();
+	public abstract void departmentQuery(String deptNo);
 	
+	public abstract void managersQuery(String deptNo);
 	
+	public abstract void employeeQuery(int empNO);
+	
+	public abstract void randomNameQuery(String firstName);
+	
+	public abstract void randomNameDepartmentsQuery(String firstName);
+	
+	public abstract void allEmployeesFromDepartmentQuery(String deptNo);
 }

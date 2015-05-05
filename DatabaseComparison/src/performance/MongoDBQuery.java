@@ -1,6 +1,7 @@
 package performance;
 import java.util.List;
 import java.util.Arrays;
+import java.util.ArrayList;
 import com.mongodb.AggregationOutput;
 import com.mongodb.BasicDBObject;
 import com.mongodb.Cursor;
@@ -14,24 +15,15 @@ import com.mongodb.MapReduceOutput;
 import com.mongodb.Mongo;  
 
 
-
-<<<<<<< HEAD
 public class MongoDBQuery extends Query{
-=======
-public class MongoQuery extends Query{
->>>>>>> f2217182a271732870caedd215fc088f22972d56
-	MongoClient mongoClient;
-	DB db;
-	DBCollection dColl, dmColl, deColl, eColl, sColl, tColl,rColl ;	//collection variable to get the tables from database.
+	private MongoClient mongoClient;
+	private DB db;
+	private DBCollection dColl, dmColl, deColl, eColl, sColl, tColl,rColl ;	//collection variable to get the tables from database.
 
-<<<<<<< HEAD
 	public void run(){
 		initConnection();
-		managerSalaries();
 	}
 	
-=======
->>>>>>> f2217182a271732870caedd215fc088f22972d56
 	//Initialize the connection and get the database from mongodb instance.
 	public void initConnection(){
 		try{   
@@ -59,91 +51,156 @@ public class MongoQuery extends Query{
 			System.out.println(e.getMessage());
 		}
 	}
-
 	
-	public void managerSalaries()
-	{
-		long begin=System.currentTimeMillis();
-
-
-		Cursor salaries;
-
-		DBObject manager;
-		DBObject salary=null;
-
-		DBObject match= null;
-		BasicDBObject temp = new BasicDBObject();
-		DBObject employee, department;
-		BasicDBObject employeeQuery=new BasicDBObject();
-		BasicDBObject deptQuery= new BasicDBObject();
-		BasicDBObject result=new BasicDBObject();
-
-		Cursor managers=dmColl.find();
-		try{
-			while(managers.hasNext())
-			{
-				manager=managers.next();
-				//temp.clear();
-
-				//make match criteria.
-				match = new BasicDBObject("$match", (new BasicDBObject("emp_no", manager.get("emp_no"))));
-				//temp.append("emp_no", manager.get("emp_no"));
-				//match.put("$match", temp);
-				// build the $projection operation
-				DBObject fields = new BasicDBObject("emp_no", 1);
-				fields.put("to_date", 1);
-				fields.put("salary", 1);
-				fields.put("_id", 1);
-				//fields.put("emp_no", 1);
-				DBObject project = new BasicDBObject("$project", fields );
-
-				// Now the $group operation
-				DBObject groupFields = new BasicDBObject( "_id", "$emp_no");
-				groupFields.put("to_date", new BasicDBObject( "$max", "$to_date"));
-				//groupFields.put("salary",new BasicDBObject("$max","$salary"));
-				DBObject group = new BasicDBObject("$group", groupFields);
-
-
-				// run aggregation
-				List<DBObject> pipeline = Arrays.asList(match, project, group);
-				AggregationOutput output = sColl.aggregate(pipeline);
-
-
-				//get employee information
-				employeeQuery.put("_id",manager.get("emp_no"));
-				employee=eColl.findOne(employeeQuery);
-
-				//get department information
-				deptQuery.put("_id", manager.get("dept_no"));
-				department= dColl.findOne(deptQuery);
-
-				//insert into results
-
-				result.put("first_name", employee.get("first_name"));
-				result.put("last_name", employee.get("last_name"));
-				result.put("emp_id",employee.get("_id"));
-				for (DBObject res : output.results()) {
-					salary = sColl.findOne((new BasicDBObject("emp_no", res.get("_id")).append("to_date", res.get("to_date"))));
-					result.put("salary", salary.get("salary"));
-					result.put("department", department.get("dept_name"));
-
-					System.out.println(res);
-				}
-
-				rColl.insert(result);
-
-				employeeQuery.clear();
-				result.clear();
-
-			}
-
-			long end=System.currentTimeMillis();
-			System.out.println("total time to insert using .find() method:" + Long.toString(end-begin) + " MilliSeconds" );
-		}
-		catch(Exception e)
-		{
-			System.out.println("Error:"+e.getMessage());
-			System.out.println(salary.get("_id"));
-		}
+	public void departmentQuery(String deptNo){
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject department = dColl.findOne(new BasicDBObject("dept_no", deptNo));
+		
+		rColl.insert(new BasicDBObject("dept_name", department.get("dept_name")));
+		
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		
+		printQuery(totalTime);
 	}
-
+	
+	public void managersQuery(String deptNo){
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject departmentQuery = new BasicDBObject("dept_no", deptNo);
+		
+		DBObject department = dColl.findOne(departmentQuery);
+		
+		DBObject managersQuery = new BasicDBObject("dept_no", department.get("_id"));
+		
+		DBCursor managers = dmColl.find(managersQuery);
+		
+		while(managers.hasNext()){
+			DBObject currentManager = managers.next();
+			DBObject employeeQuery = new BasicDBObject("_id", currentManager.get("emp_no"));
+			DBObject employee = eColl.findOne(employeeQuery);
+			
+			rColl.insert(new BasicDBObject("first_name", employee.get("first_name"))
+						.append("last_name", employee.get("last_name")));
+		}
+		
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		
+		printQuery(totalTime);
+	}
+	
+	public void employeeQuery(int empNo){
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject searchQuery = new BasicDBObject("emp_no", empNo);
+		
+		DBObject employee = eColl.findOne(searchQuery);
+		
+		rColl.insert(employee);
+		
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		
+		printQuery(totalTime);
+	}
+	
+	public void randomNameQuery(String firstName){
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject searchQuery = new BasicDBObject("first_name", firstName);
+		
+		DBCursor employees = eColl.find(searchQuery);
+		
+		while(employees.hasNext()){
+			DBObject currentEmployee = employees.next();
+			rColl.insert(currentEmployee);
+		}
+		
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		
+		printQuery(totalTime);
+	}
+	
+	public void randomNameDepartmentsQuery(String firstName){
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject searchQuery = new BasicDBObject("first_name", firstName);
+		
+		DBCursor employees = eColl.find(searchQuery);
+		
+		while(employees.hasNext()){
+			DBObject currentEmployee = employees.next();
+			
+			DBObject deptSearch = new BasicDBObject("emp_no", currentEmployee.get("_id"));
+			
+			DBObject deptEmp = deColl.findOne(deptSearch);
+			
+			deptSearch = new BasicDBObject("_id", deptEmp.get("dept_no"));
+			
+			DBObject department = dColl.findOne(deptSearch);
+			
+			if(rColl.findOne(department) == null){
+				rColl.insert(department);
+			}
+		}
+		
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		
+		printQuery(totalTime);
+	}
+	
+	public void allEmployeesFromDepartmentQuery(String deptNo){
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject department = dColl.findOne(new BasicDBObject("dept_no", deptNo));
+		
+		DBCursor departmentEmployees = deColl.find(new BasicDBObject("dept_no", department.get("_id")));
+		
+		while(departmentEmployees.hasNext()){
+			DBObject employee = departmentEmployees.next();
+			
+			DBObject employeeObject = eColl.findOne(new BasicDBObject("_id", employee.get("emp_no")));
+			
+			rColl.insert(employeeObject);
+		}
+		
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		
+		printQuery(totalTime);
+	}
+	
+	public void printQuery(long executeTime){
+		DBCursor result = rColl.find();
+		
+		System.out.println("Returned query:");
+		
+		while(result.hasNext()){
+			System.out.println(result.next());
+		}
+		
+		System.out.println("Time to execute query: " + executeTime + "ms");
+	}
+}

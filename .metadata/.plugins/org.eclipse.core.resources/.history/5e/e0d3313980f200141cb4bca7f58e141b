@@ -1,0 +1,105 @@
+package performance;
+import java.util.List;
+import java.util.Arrays;
+import java.util.ArrayList;
+import com.mongodb.AggregationOutput;
+import com.mongodb.BasicDBObject;
+import com.mongodb.Cursor;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MapReduceCommand;  
+import com.mongodb.MapReduceOutput;  
+import com.mongodb.Mongo;  
+
+
+public class MongoDBQuery extends Query{
+	private MongoClient mongoClient;
+	private DB db;
+	private DBCollection dColl, dmColl, deColl, eColl, sColl, tColl,rColl ;	//collection variable to get the tables from database.
+
+	public void run(){
+		initConnection();
+	}
+	
+	//Initialize the connection and get the database from mongodb instance.
+	public void initConnection(){
+		try{   
+			// To connect to mongodb server
+			mongoClient = new MongoClient( "localhost" , 27017 );
+
+			// Now use your databases
+			db = mongoClient.getDB( "employees" );
+
+			// getting all the collecitons.
+			dColl = db.getCollection("departments");
+			dmColl = db.getCollection("dept_manager");
+			deColl = db.getCollection("dept_emp");
+			eColl = db.getCollection("employees");
+			sColl = db.getCollection("salaries");
+			tColl = db.getCollection("titles");
+			rColl=db.getCollection("result");
+			rColl.drop();
+			rColl=db.getCollection("result");
+
+
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public void departmentQuery(String deptNo){
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject searchQuery = new BasicDBObject("dept_no", deptNo);
+		
+		DBObject department = dColl.findOne(searchQuery);
+		
+		rColl.insert(new BasicDBObject("dept_name", department.get("dept_name")));
+		
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		
+		printQuery(totalTime);
+	}
+	
+	public void managersQuery(String deptNo){
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject departmentQuery = new BasicDBObject("dept_no", deptNo);
+		
+		DBObject department = dColl.findOne(departmentQuery);
+		
+		DBObject managersQuery = new BasicDBObject("dept_no", department.get("_id"));
+		
+		DBCursor managers = dmColl.find(managersQuery);
+		
+		while(managers.hasNext()){
+			DBObject currentManager = managers.next();
+			DBObject employeeQuery = new BasicDBObject("_id", currentManager.get("emp_no"));
+			DBObject employee = eColl.findOne(employeeQuery);
+		}
+	}
+	
+	public void printQuery(long executeTime){
+		DBCursor result = rColl.find();
+		
+		System.out.println("Returned query:");
+		
+		while(result.hasNext()){
+			System.out.println(result.next());
+		}
+		
+		System.out.println("Time to execute query: " + executeTime + "ms");
+	}
+}

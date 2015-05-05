@@ -123,7 +123,30 @@ public class MySQLQuery extends Query {
 		}
 		
 	}
-			
+	
+	public void departmentQuery(String deptNo){
+		
+	}
+	
+	public void managersQuery(String deptNo){
+		
+	}
+	
+	public void employeeQuery(int empN){
+		
+	}
+	
+	public void randomNameQuery(String firstName){
+		
+	}
+	
+	public void randomNameDepartmentsQuery(String firstName){
+		
+	}
+		
+	public void allEmployeesFromDepartmentQuery(String deptNo){
+		
+	}
 }
 
 		
