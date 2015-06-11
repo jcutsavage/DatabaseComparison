@@ -13,11 +13,8 @@ public class Driver{
 		Query sqlQuery= new MysqlQueries();
 		sqlQuery.initConnection();
 		sqlQuery.avgSalary();
-		String s = "1985-09-08";
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = format.parse(s);
-		String dateFormated=format.format(date);
-		sqlQuery.avgSalaryAfterDate(dateFormated);
+		String date = "1985-09-08";
+		sqlQuery.avgSalaryAfterDate(date);
 		int salary = 150000;
 		sqlQuery.empNoOfCertainSalary(salary);
 		
