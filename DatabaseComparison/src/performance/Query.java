@@ -33,4 +33,6 @@ public abstract class Query {
 	public abstract void randomNameDepartmentsQuery(String firstName);
 	
 	public abstract void allEmployeesFromDepartmentQuery(String deptNo);
+	
+	public abstract void averageSalariesQuery(String deptNo);
 }
