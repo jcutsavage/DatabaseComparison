@@ -1,0 +1,27 @@
+package crud;
+
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
+
+public class MongoDBCreator extends DBCreator {
+
+	private MongoClient client;
+	private DB db;
+	
+	public void initConnection(String dbName){
+		try{
+			// To connect to mongodb server
+			client = new MongoClient( "localhost" , 27017 );
+			
+			db = client.getDB(dbName);
+		}
+		catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public void createCollection(String collName){
+		db.getCollection(collName);
+	}
+}

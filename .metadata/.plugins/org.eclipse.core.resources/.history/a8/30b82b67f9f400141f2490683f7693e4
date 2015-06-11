@@ -1,0 +1,6 @@
+package crud;
+
+public abstract class DBCreator {
+	
+	public abstract void initConnection();
+}

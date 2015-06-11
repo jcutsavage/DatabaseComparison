@@ -1,0 +1,157 @@
+package performance.NewQueries;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.Statement;
+import java.util.Date;
+
+
+public class MysqlQueries extends Query {
+	Connection con;
+	int columnCount;
+	ResultSet res;
+
+	/**
+	 * Creates a new mysql connection on the default host. Provide
+	 * the connection with your username and password to log into MySQL
+	 *
+	 * @param username: The user's username.
+	 * @param password: The user's password.
+	 *
+	 */
+	public void initConnection(){
+		try {
+			String url = "jdbc:mysql://localhost/";
+			String dbName = "employees";
+			String driver = "com.mysql.jdbc.Driver";
+			String userName = "root"; 
+			String password = "mysql";
+			try {
+				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/employees?user=root&password=password");
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}	  
+		} finally{}
+	}
+
+	/** this function prints the result set after execution of a query.
+	 * 
+	 * @param res result set of a query.
+	 */
+	public void printQuery(ResultSet res){
+		
+		try{
+			ResultSetMetaData rsmd = res.getMetaData();
+			int columnCount = rsmd.getColumnCount();
+			// Print column names
+			StringBuilder fields = new StringBuilder();
+			for (int i = 1; i <= columnCount; i++){
+				fields.append(String.format("%-20s", rsmd.getColumnName(i)) + " ");
+			}
+			System.out.println(fields);
+			// Print query result
+			StringBuilder data = new StringBuilder();
+			while (res.next()) {
+				for (int i = 1; i <= columnCount; i++) {
+					data.append(String.format("%-20s",res.getString(i)) + "|");
+				}
+				data.append("\n");
+			}
+			System.out.println(data);
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+		System.out.println();
+	}	
+
+	/**
+	 * find the average salary of all employees in the salaries table
+	 */
+	public void avgSalary(){
+		try{
+
+			Statement statement = con.createStatement();
+			//taking the time before executing query.
+			long startTime = System.currentTimeMillis();
+			String sql="select  avg(salary) from salaries";
+			res = statement.executeQuery(sql);
+			//taking the time after executing query.
+			long endTime = System.currentTimeMillis();
+			//time takes to execute query.
+			long runTime = endTime - startTime;
+			
+			System.out.println("avgSalaryQuery");
+			System.out.println("runtime = " + runTime + " milliseconds");
+			//printing the result set.
+			printQuery(res);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Get the average salary of all employees after a certain date.
+	 * @param date is a string which will be using as the date mentioned above.
+	 */
+	public void avgSalaryAfterDate(String date){
+		try{
+
+			Statement statement = con.createStatement();
+			//taking the time before executing query.
+			long startTime = System.currentTimeMillis();
+			String sql="select avg(salary) from salaries where from_date> '" + date + "'";
+			res = statement.executeQuery(sql);
+			//taking the time after executing query.
+			long endTime = System.currentTimeMillis();
+			//time takes to execute query.
+			long runTime = endTime - startTime;
+			System.out.println("avgSalaryAfterDate");
+			System.out.println("runtime = " + runTime + " milliseconds");
+			//printTime(runTime);
+			
+			printQuery(res);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * This method is not used in this implementation. See
+	 * avgSalaryAfterDate(String date).
+	 */
+	public void avgSalaryAfterDate(Date date){}
+	
+	/**
+	 * Get the employee numbers who get salaries above the parameter value.
+	 * @param salary is a int value 
+	 */
+	public void empNoOfCertainSalary(int salary){
+		try{
+
+			Statement statement = con.createStatement();
+			//taking the time before executing query.
+			long startTime = System.currentTimeMillis();
+			String sql="select emp_no from salaries where salary  > " + salary;
+			res = statement.executeQuery(sql);
+			//taking the time after executing query.
+			long endTime = System.currentTimeMillis();
+			//time takes to execute query.
+			long runTime = endTime - startTime;
+			System.out.println("empNoOfCertainSalary");
+			//printQuery(res);
+			System.out.println("runtime = " + runTime + " milliseconds");
+			//printTime(runTime);
+			printQuery(res);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+}

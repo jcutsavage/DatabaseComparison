@@ -1,0 +1,139 @@
+package performance.NewQueries;
+
+import java.util.List;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Date;
+
+import com.mongodb.AggregationOutput;
+import com.mongodb.BasicDBObject;
+import com.mongodb.Cursor;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MapReduceCommand;  
+import com.mongodb.MapReduceOutput;  
+import com.mongodb.Mongo;
+import com.mongodb.QueryBuilder;
+import com.mongodb.QueryOperators;
+
+public class MongoQueries extends Query {
+	private MongoClient client;
+	private DB db;
+	private DBCollection dColl, dmColl, deColl, eColl, 
+			sColl, tColl,rColl ;	//collection variable to get the tables from database.
+	
+	@Override
+	public void initConnection() {
+		try{   
+			// To connect to mongodb server
+			client = new MongoClient( "localhost" , 27017 );
+
+			// Now use the employees database
+			db = client.getDB( "employees" );
+
+			// Set up each collection.
+			dColl = db.getCollection("departments");
+			dmColl = db.getCollection("dept_manager");
+			deColl = db.getCollection("dept_emp");
+			eColl = db.getCollection("employees");
+			sColl = db.getCollection("salaries");
+			tColl = db.getCollection("titles");
+			rColl=db.getCollection("result");
+			rColl.drop();
+			rColl=db.getCollection("result");
+
+
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+	}
+
+	@Override
+	public void empNoOfCertainSalary(int salary) {
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject query = new QueryBuilder()
+		.start().put("salary").greaterThan(salary).get();
+		
+		DBCursor employees = sColl.find(query);
+		
+		long endTime = System.currentTimeMillis();
+		
+		long runTime = endTime - startTime;
+		
+		while(employees.hasNext()){
+			DBObject convert = new BasicDBObject();
+			convert.put("_id", employees.next().get("emp_no"));
+			DBObject emp = eColl.findOne(convert);
+			
+			DBObject empNo = new BasicDBObject();
+			empNo.put("emp_no", emp.get("emp_no"));
+			
+			rColl.insert(empNo);
+		}
+		
+		System.out.println("Time to execute: " + runTime  + "ms");
+		
+		printQuery();
+	}
+
+	@Override
+	public void avgSalaryAfterDate(String date) {}
+	
+	@Override
+	public void avgSalaryAfterDate(Date date) {
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject query = new QueryBuilder()
+		.start().put("from_date").greaterThan(date).get();
+		
+		DBCursor employees = sColl.find(query);
+		
+		long total = 0;
+		
+		while(employees.hasNext()){
+			total += (Integer)employees.next().get("salary");
+		}
+		
+		long avg = total / employees.count();
+		
+		long endTime = System.currentTimeMillis();
+		
+		long runTime = endTime - startTime;
+		
+		DBObject avgSalary = new BasicDBObject();
+		avgSalary.put("average_salary", avg);
+		
+		rColl.insert(avgSalary);
+		
+		System.out.println("Time to execute: " + runTime  + "ms");
+		
+		printQuery();
+	}
+
+	@Override
+	public void avgSalary() {
+		// TODO Auto-generated method stub
+
+	}
+	
+	public void printQuery(){
+		DBCursor print = rColl.find();
+		
+		while(print.hasNext()){
+			System.out.println(print.next());
+		}
+	}
+
+}

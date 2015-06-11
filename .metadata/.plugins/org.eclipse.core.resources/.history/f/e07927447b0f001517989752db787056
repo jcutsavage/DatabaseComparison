@@ -1,0 +1,59 @@
+package performance.NewQueries;
+
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
+
+public class MongoQueries extends Query {
+	private MongoClient client;
+	private DB db;
+	private DBCollection dColl, dmColl, deColl, eColl, 
+			sColl, tColl,rColl ;	//collection variable to get the tables from database.
+	
+	@Override
+	public void initConnection() {
+		try{   
+			// To connect to mongodb server
+			client = new MongoClient( "localhost" , 27017 );
+
+			// Now use the employees database
+			db = client.getDB( "employees" );
+
+			// Set up each collection.
+			dColl = db.getCollection("departments");
+			dmColl = db.getCollection("dept_manager");
+			deColl = db.getCollection("dept_emp");
+			eColl = db.getCollection("employees");
+			sColl = db.getCollection("salaries");
+			tColl = db.getCollection("titles");
+			rColl=db.getCollection("result");
+			rColl.drop();
+			rColl=db.getCollection("result");
+
+
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+	}
+
+	@Override
+	public void empNoOfCertainSalary(int salary) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void avgSalaryAfterDate(String date) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void avgSalary() {
+		// TODO Auto-generated method stub
+
+	}
+
+}

@@ -1,0 +1,204 @@
+package performance.NewQueries;
+
+import java.util.List;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Date;
+
+import com.mongodb.AggregationOutput;
+import com.mongodb.BasicDBObject;
+import com.mongodb.Cursor;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MapReduceCommand;  
+import com.mongodb.MapReduceOutput;  
+import com.mongodb.Mongo;
+import com.mongodb.QueryBuilder;
+import com.mongodb.QueryOperators;
+
+/**
+ * 
+ * @author John Cutsavage
+ * 
+ * Implementation of the Query interface for MongoDB.
+ *
+ */
+public class MongoQueries extends Query {
+	private MongoClient client;
+	private DB db;
+	private DBCollection dColl, dmColl, deColl, eColl, 
+			sColl, tColl,rColl ;	//collection variable to get the tables from database.
+	
+	/**
+	 * Initializes connection to MongoDB server, using the employees
+	 * database.
+	 */
+	public void initConnection() {
+		try{   
+			// To connect to mongodb server
+			client = new MongoClient( "localhost" , 27017 );
+
+			// Now use the employees database
+			db = client.getDB( "employees" );
+
+			// Set up each collection.
+			dColl = db.getCollection("departments");
+			dmColl = db.getCollection("dept_manager");
+			deColl = db.getCollection("dept_emp");
+			eColl = db.getCollection("employees");
+			sColl = db.getCollection("salaries");
+			tColl = db.getCollection("titles");
+			rColl=db.getCollection("result");
+			rColl.drop();
+			rColl=db.getCollection("result");
+
+
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+	}
+
+	/**
+	 * Get the employee numbers who get salaries above the parameter value.
+	 * @param salary The minimum salary to be included in the query.
+	 */
+	public void empNoOfCertainSalary(int salary) {
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		System.out.println("empNoOfCertainSalary");
+		
+		long startTime = System.currentTimeMillis();
+		
+		//Build query that searches for salaries above the given amount
+		DBObject query = new QueryBuilder()
+		.start().put("salary").greaterThan(salary).get();
+		
+		DBCursor employees = sColl.find(query);
+		
+		long endTime = System.currentTimeMillis();
+		
+		long runTime = endTime - startTime;
+		
+		/*
+		 * Because the salaries collection stores Object IDs instead of
+		 * integers for the emp_no field, a join is needed to find the actual
+		 * employee number. This was not included in the run time.
+		 */
+		while(employees.hasNext()){
+			DBObject convert = new BasicDBObject();
+			convert.put("_id", employees.next().get("emp_no"));
+			DBObject emp = eColl.findOne(convert);
+			
+			DBObject empNo = new BasicDBObject();
+			empNo.put("emp_no", emp.get("emp_no"));
+			
+			rColl.insert(empNo);
+		}
+		
+		System.out.println("Time to execute: " + runTime  + "ms");
+		
+		printQuery();
+		System.out.println();
+	}
+
+	/**
+	 * 
+	 * This method is not used for this implementation. See
+	 * avgSalaryAfterDate(Date date).
+	 */
+	public void avgSalaryAfterDate(String date) {}
+	
+	/**
+	 * Get the average salary of all employees that started after a certain date.
+	 * @param date A date in the yyyy-MM-dd format.
+	 */
+	public void avgSalaryAfterDate(Date date) {
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		System.out.println("avgSalaryAfterDate");
+		
+		long startTime = System.currentTimeMillis();
+		
+		//Build query to find all salaries after a given date
+		DBObject query = new QueryBuilder()
+		.start().put("from_date").greaterThan(date).get();
+		
+		DBCursor employees = sColl.find(query);
+		
+		//Calculate the average of all returned salaries
+		double total = 0;
+		
+		while(employees.hasNext()){
+			total += (Integer)employees.next().get("salary");
+		}
+		
+		double avg = total / employees.count();
+	
+		long endTime = System.currentTimeMillis();
+		
+		long runTime = endTime - startTime;
+		
+		DBObject avgSalary = new BasicDBObject();
+		avgSalary.put("average_salary", avg);
+		
+		rColl.insert(avgSalary);
+		
+		System.out.println("Time to execute: " + runTime  + "ms");
+		
+		printQuery();
+		System.out.println();
+	}
+
+	/**
+	 * Find the average salary of all employees in the salaries collection.
+	 */
+	public void avgSalary() {
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBCursor employees = sColl.find();
+		
+		double total = 0;
+		
+		while(employees.hasNext()){
+			total += (Integer)employees.next().get("salary");
+		}
+		
+		double avg = total / employees.count();
+	
+		long endTime = System.currentTimeMillis();
+		
+		long runTime = endTime - startTime;
+		
+		DBObject avgSalary = new BasicDBObject();
+		avgSalary.put("average_salary", avg);
+		
+		rColl.insert(avgSalary);
+		
+		System.out.println("Time to execute: " + runTime  + "ms");
+		
+		printQuery();
+		System.out.println();
+	}
+	
+	/**
+	 * Prints the result collections, which holds a query's result.
+	 */
+	public void printQuery(){
+		DBCursor print = rColl.find();
+		
+		while(print.hasNext()){
+			System.out.println(print.next());
+		}
+	}
+
+}

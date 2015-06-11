@@ -1,0 +1,5 @@
+package performance.NewQueries;
+
+public abstract class Query {
+
+}

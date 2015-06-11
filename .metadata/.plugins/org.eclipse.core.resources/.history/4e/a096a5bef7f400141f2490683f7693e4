@@ -1,0 +1,8 @@
+package crud;
+
+public class MongoDBCreator extends DBCreator {
+
+	public void initConnection(){
+		
+	}
+}

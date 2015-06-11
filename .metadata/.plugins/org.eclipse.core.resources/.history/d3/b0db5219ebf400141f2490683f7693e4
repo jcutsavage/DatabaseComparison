@@ -1,0 +1,323 @@
+package performance;
+import java.util.List;
+import java.util.Arrays;
+import java.util.ArrayList;
+import com.mongodb.AggregationOutput;
+import com.mongodb.BasicDBObject;
+import com.mongodb.Cursor;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MapReduceCommand;  
+import com.mongodb.MapReduceOutput;  
+import com.mongodb.Mongo;
+import com.mongodb.QueryBuilder;
+import com.mongodb.QueryOperators;
+
+/**
+ * 
+ * @author John Cutsavage
+ * @author Sharmeen Jahan
+ * @author Drew Whittaker
+ * 
+ * MongoDB implementation of the Query abstract class.
+ *
+ */
+public class MongoDBQuery extends Query{
+	private MongoClient client;
+	private DB db;
+	private DBCollection dColl, dmColl, deColl, eColl, 
+			sColl, tColl,rColl ;	//collection variable to get the tables from database.
+
+	public void run(){
+		initConnection();
+	}
+	
+	/**
+	 * Initialize the connection to the local MongoDB server.
+	 * Set up all of the collections for the Employee database.
+	 */
+	public void initConnection(){
+		try{   
+			// To connect to mongodb server
+			client = new MongoClient( "localhost" , 27017 );
+
+			// Now use the employees database
+			db = client.getDB( "employees" );
+
+			// Set up each collection.
+			dColl = db.getCollection("departments");
+			dmColl = db.getCollection("dept_manager");
+			deColl = db.getCollection("dept_emp");
+			eColl = db.getCollection("employees");
+			sColl = db.getCollection("salaries");
+			tColl = db.getCollection("titles");
+			rColl=db.getCollection("result");
+			rColl.drop();
+			rColl=db.getCollection("result");
+
+
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	/**
+	 * Find the department associated with a given department number.
+	 * @param deptNo, a string of the department's number.
+	 */
+	public void departmentQuery(String deptNo){
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject department = dColl.findOne(new BasicDBObject("dept_no", deptNo));
+		
+		rColl.insert(new BasicDBObject("dept_name", department.get("dept_name")));
+		
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		
+		printQuery(totalTime);
+	}
+	
+	/**
+	 * Return all managers from a given department based on dept_no.
+	 * @param deptNo, a string of the department's number.
+	 */
+	public void managersQuery(String deptNo){
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject departmentQuery = new BasicDBObject("dept_no", deptNo);
+		
+		DBObject department = dColl.findOne(departmentQuery);
+		
+		DBObject managersQuery = new BasicDBObject("dept_no", department.get("_id"));
+		
+		DBCursor managers = dmColl.find(managersQuery);
+		
+		while(managers.hasNext()){
+			DBObject currentManager = managers.next();
+			DBObject employeeQuery = new BasicDBObject("_id", currentManager.get("emp_no"));
+			DBObject employee = eColl.findOne(employeeQuery);
+			
+			rColl.insert(new BasicDBObject("first_name", employee.get("first_name"))
+						.append("last_name", employee.get("last_name")));
+		}
+		
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		
+		printQuery(totalTime);
+	}
+	
+	/**
+	 * Find an employee based on a given emp_no.
+	 * @param empNo, the employee number being being search for.
+	 */
+	public void employeeQuery(int empNo){
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject searchQuery = new BasicDBObject("emp_no", empNo);
+		
+		DBObject employee = eColl.findOne(searchQuery);
+		
+		rColl.insert(employee);
+		
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		
+		printQuery(totalTime);
+	}
+	
+	/**
+	 * Find all employees that share a common first name.
+	 * @param firstName, the first name being queried.
+	 */
+	public void randomNameQuery(String firstName){
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject searchQuery = new BasicDBObject("first_name", firstName);
+		
+		DBCursor employees = eColl.find(searchQuery);
+		
+		while(employees.hasNext()){
+			DBObject currentEmployee = employees.next();
+			rColl.insert(currentEmployee);
+		}
+		
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		
+		printQuery(totalTime);
+	}
+	
+	/**
+	 * Return all departments that have at least one employee with
+	 * a random first name.
+	 * @param firstName, the first name being queried.
+	 */
+	public void randomNameDepartmentsQuery(String firstName){
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject searchQuery = new BasicDBObject("first_name", firstName);
+		
+		DBCursor employees = eColl.find(searchQuery);
+		
+		while(employees.hasNext()){
+			DBObject currentEmployee = employees.next();
+			
+			DBObject deptSearch = new BasicDBObject("emp_no", currentEmployee.get("_id"));
+			
+			DBObject deptEmp = deColl.findOne(deptSearch);
+			
+			deptSearch = new BasicDBObject("_id", deptEmp.get("dept_no"));
+			
+			DBObject department = dColl.findOne(deptSearch);
+			
+			if(rColl.findOne(department) == null){
+				rColl.insert(department);
+			}
+		}
+		
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		
+		printQuery(totalTime);
+	}
+	
+	/**
+	 * Return all employees from a given department based on dept_no.
+	 * @param deptNo, a string of the department number.
+	 */
+	public void allEmployeesFromDepartmentQuery(String deptNo){
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject department = dColl.findOne(new BasicDBObject("dept_no", deptNo));
+		
+		DBCursor departmentEmployees = deColl.find(new BasicDBObject("dept_no", department.get("_id")));
+		
+		while(departmentEmployees.hasNext()){
+			DBObject employee = departmentEmployees.next();
+			
+			DBObject employeeObject = eColl.findOne(new BasicDBObject("_id", employee.get("emp_no")));
+			
+			rColl.insert(employeeObject);
+		}
+		
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		
+		printQuery(totalTime);
+	}
+	
+	/**
+	 * Return the average salary of all employees in a given department.
+	 * @param deptNo, a string of the department number.
+	 */
+	public void averageSalariesQuery(String deptNo){
+		ArrayList<Integer> salaries = new ArrayList<Integer>();
+		
+		rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+		
+		DBObject department = dColl.findOne(new BasicDBObject("dept_no", deptNo));
+		
+		DBCursor departmentEmployees = deColl.find(new BasicDBObject("dept_no", department.get("_id")));
+		
+		while(departmentEmployees.hasNext()){
+			DBObject employee = departmentEmployees.next();
+			DBObject salaryQuery = new BasicDBObject("emp_no", employee.get("emp_no"));
+			//salaryQuery.put("from_date", employee.get("from_date"));
+			//salaryQuery.put("to_date", employee.get("to_date"));
+			
+			DBObject salary = sColl.findOne(salaryQuery);
+			
+			int sal = (Integer) salary.get("salary");
+			
+			salaries.add(sal);
+		}	
+		
+		int avg = listAverage(salaries);
+		
+		rColl.insert(new BasicDBObject("average_salary", avg));
+		
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		
+		printQuery(totalTime);
+	}
+	
+	public void averageTest(String deptNo){
+		DBObject deptQuery = new QueryBuilder().start().put("dept_no").is(deptNo).get();
+		
+		DBObject dept = dColl.findOne(deptQuery);
+		
+		DBObject empQuery = new QueryBuilder().start().put("dept_no").is(dept.get("_id")).get();
+		
+		DBCursor deptEmps = deColl.find(empQuery);
+		
+		while(deptEmps.hasNext()){
+			DBObject emp = deptEmps.next();
+			
+			DBObject salaryQuery = new QueryBuilder().start()
+										.and(new QueryBuilder().start().put("emp_no").is(emp.get("emp_no")).get(),
+												new QueryBuilder().start().put("from_date")
+													.is(emp.get("from_date")).get()).get();
+		}
+	}
+	
+	public int listAverage(ArrayList<Integer> list){
+		int average = 0;
+		
+		for(int i = 0; i < list.size(); i++){
+			average += list.get(i);
+		}
+		
+		average = average / list.size();
+		
+		return average;
+	}
+	
+	/**
+	 * Print the result collection.
+	 * @param executeTime the time it's takes to run the query.
+	 */
+	public void printQuery(long executeTime){
+		DBCursor result = rColl.find();
+		
+		System.out.println("Returned query:");
+		
+		while(result.hasNext()){rColl.drop();
+		rColl = db.getCollection("result");
+		
+		long startTime = System.currentTimeMillis();
+			System.out.println(result.next());
+		}
+		
+		System.out.println("Time to execute query: " + executeTime + "ms");
+		System.out.println();
+	}
+}

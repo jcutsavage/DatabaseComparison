@@ -1,0 +1,29 @@
+package performance.NewQueries;
+
+public class MongoQueries extends Query {
+
+	@Override
+	public void initConnection() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void empNoOfCertainSalary(int salary) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void avgSalaryAfterDate(String date) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void avgSalary() {
+		// TODO Auto-generated method stub
+
+	}
+
+}

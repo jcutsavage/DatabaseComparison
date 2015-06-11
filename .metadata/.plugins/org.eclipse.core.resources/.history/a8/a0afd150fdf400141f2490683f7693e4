@@ -1,0 +1,21 @@
+package misc;
+
+import java.util.HashMap;
+import java.util.Random;
+
+public class RandomGenerator {
+
+	private HashMap<Integer, String> firstNames;
+	private HashMap<Integer, String> lastNames;
+	private Random rand;
+	
+	public String getRandomFirstName(){
+		return "";
+	}
+	
+	public String getRandomLastName(){
+		return "";
+	}
+	
+	
+}

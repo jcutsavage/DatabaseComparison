@@ -1,0 +1,16 @@
+package crud;
+
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.MongoClient;
+
+public class MongoDBCreator extends DBCreator {
+
+	private MongoClient client;
+	private DB db;
+	private DBCollection department, user, project; 
+	
+	public void initConnection(){
+		
+	}
+}

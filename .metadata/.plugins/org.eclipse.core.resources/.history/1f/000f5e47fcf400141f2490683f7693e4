@@ -1,0 +1,32 @@
+package crud;
+
+import java.sql.*;
+
+public class MySQLCreator extends DBCreator {
+
+	Connection con;
+	
+	public void initConnection(String dbName){
+		try {
+			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/"+ dbName 
+					+ "?user=root&password=password");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void createTable(String tableName){
+		try{
+			Statement create = con.createStatement();
+			
+			String createStatement = "";
+			
+			create.execute(createStatement);
+		}
+		catch(Exception e){
+			
+		}
+	}
+	
+}
