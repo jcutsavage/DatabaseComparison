@@ -14,7 +14,13 @@ public class Driver{
 		sqlQuery.initConnection();
 		sqlQuery.avgSalary();
 		String s = "1985-09-08";
-		sqlQuery.avgSalaryAfterDate(s);
+		//formating the string s to date for Mongo queries.
+		DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = dFormat.parse(s);
+		//reformating the date to string for mysql queries.
+		String dateFormated = dFormat.format(date );
+		sqlQuery.avgSalaryAfterDate(dateFormated);
+	
 		int salary = 150000;
 		sqlQuery.empNoOfCertainSalary(salary);
 		
