@@ -85,7 +85,7 @@ public class MysqlQueries extends Query {
 			long runTime = endTime - startTime;
 			
 			System.out.println("avgSalaryQuery");
-			System.out.println("runtime = " + runTime + " milliseconds");
+			System.out.println("time to execute = " + runTime + " milliseconds");
 			//printing the result set.
 			printQuery(res);
 		}
@@ -111,7 +111,7 @@ public class MysqlQueries extends Query {
 			//time takes to execute query.
 			long runTime = endTime - startTime;
 			System.out.println("avgSalaryAfterDate");
-			System.out.println("runtime = " + runTime + " milliseconds");
+			System.out.println("time to execute = " + runTime + " milliseconds");
 			//printTime(runTime);
 			
 			printQuery(res);
@@ -145,7 +145,7 @@ public class MysqlQueries extends Query {
 			long runTime = endTime - startTime;
 			System.out.println("empNoOfCertainSalary");
 			//printQuery(res);
-			System.out.println("runtime = " + runTime + " milliseconds");
+			System.out.println("time to execute = " + runTime + " milliseconds");
 			//printTime(runTime);
 			printQuery(res);
 		}
