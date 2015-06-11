@@ -13,8 +13,8 @@ public class Driver{
 		Query sqlQuery= new MysqlQueries();
 		sqlQuery.initConnection();
 		sqlQuery.avgSalary();
-		String date = "1985-09-08";
-		sqlQuery.avgSalaryAfterDate(date);
+		String s = "1985-09-08";
+		sqlQuery.avgSalaryAfterDate(s);
 		int salary = 150000;
 		sqlQuery.empNoOfCertainSalary(salary);
 		
