@@ -19,7 +19,7 @@ public class Driver{
 		Date date = dFormat.parse(s);
 		//reformatting the date to string for mysql queries.
 		String dateFormated = dFormat.format(date );
-		sqlQuery.avgSalaryAfterDate(dateFormated);
+		sqlQuery.avgSalary(dateFormated);
 	
 		int salary = 150000;
 		sqlQuery.empNoOfCertainSalary(salary);
