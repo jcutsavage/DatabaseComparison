@@ -1,3 +1,4 @@
+
 package performance.NewQueries;
 
 import java.sql.Connection;
@@ -8,7 +9,7 @@ import java.sql.Statement;
 import java.util.Date;
 
 
-public class MysqlQueries extends Query {
+public class newMysql extends newQueries {
 	Connection con;
 	int columnCount;
 	ResultSet res;
@@ -29,7 +30,7 @@ public class MysqlQueries extends Query {
 			String userName = "root"; 
 			String password = "mysql";
 			try {
-				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/employees?user=root&password=password");
+				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/employees?user=root&password=mysql");
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -37,12 +38,13 @@ public class MysqlQueries extends Query {
 		} finally{}
 	}
 
+
 	/** this function prints the result set after execution of a query.
 	 * 
 	 * @param res result set of a query.
 	 */
 	public void printQuery(ResultSet res){
-		
+
 		try{
 			ResultSetMetaData rsmd = res.getMetaData();
 			int columnCount = rsmd.getColumnCount();
@@ -83,9 +85,9 @@ public class MysqlQueries extends Query {
 			long endTime = System.currentTimeMillis();
 			//time takes to execute query.
 			long runTime = endTime - startTime;
-			
-			System.out.println("avgSalaryQuery");
-			System.out.println("time to execute = " + runTime + " milliseconds");
+
+			System.out.println("avgSalary");
+			System.out.println("Time to execute = " + runTime + " milliseconds");
 			//printing the result set.
 			printQuery(res);
 		}
@@ -93,40 +95,57 @@ public class MysqlQueries extends Query {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * Get the average salary of all employees after a certain date.
 	 * @param date is a string which will be using as the date mentioned above.
 	 */
-	public void avgSalaryAfterDate(String date){
+	public void avgSalary(String date){
 		try{
 
-			Statement statement = con.createStatement();
-			//taking the time before executing query.
+			Statement indexStatement = con.createStatement();
+			Statement chkStatement= con.createStatement();
+			Statement queryStatement= con.createStatement();
+			
+			//checking if there is an existing index on from_date column.
+			ResultSet chkIndex;
+			String chkSql= "select count(1) IndexIsThere from information_schema.statistics "
+					+ "where table_schema= 'employees' and table_name= 'salaries' and index_name= 'sal_from_date'";
+			chkIndex = chkStatement.executeQuery(chkSql); 
+			chkIndex.next();
+			int val= chkIndex.getInt(1);
+			// if there is no existing index on from_date, create one.
+			if(val == 0){
+				String indexSql= "create index sal_from_date on salaries(from_date)";
+				indexStatement.executeUpdate(indexSql);
+			}	
+
 			long startTime = System.currentTimeMillis();
-			String sql="select avg(salary) from salaries where from_date> '" + date + "'";
-			res = statement.executeQuery(sql);
+			String mainSql="select avg(salary) from  "
+					+ "   salaries use index (sal_from_date) "
+					+ "   where from_date > '" + date + "'";
+			res = queryStatement.executeQuery(mainSql);
 			//taking the time after executing query.
 			long endTime = System.currentTimeMillis();
 			//time takes to execute query.
 			long runTime = endTime - startTime;
-			System.out.println("avgSalaryAfterDate");
-			System.out.println("time to execute = " + runTime + " milliseconds");
+			System.out.println("avgSalary after certain date ");
+			System.out.println("Time to execute = " + runTime + " milliseconds");
 			//printTime(runTime);
-			
+
 			printQuery(res);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * This method is not used in this implementation. See
-	 * avgSalaryAfterDate(String date).
+	 * avgSalary(String date).
 	 */
 	public void avgSalaryAfterDate(Date date){}
-	
+
 	/**
 	 * Get the employee numbers who get salaries above the parameter value.
 	 * @param salary is a int value 
@@ -135,9 +154,25 @@ public class MysqlQueries extends Query {
 		try{
 
 			Statement statement = con.createStatement();
+			Statement indexStatement = con.createStatement();
+			Statement chkStatement= con.createStatement();
+			
+			//checking if there is an existing index on salary.
+			ResultSet chkIndex;
+			String chkSql= "select count(1) IndexIsThere from information_schema.statistics "
+					+ "where table_schema= 'employees' and table_name= 'salaries' and index_name= 'sal_salary'";
+			chkIndex = chkStatement.executeQuery(chkSql); 
+			chkIndex.next();
+			int val= chkIndex.getInt(1);
+			// if there is no existing index on salary, create one.
+			if(val == 0){
+				String indexSql= "create index sal_salary on salaries(salary)";
+				indexStatement.executeUpdate(indexSql);
+			}	
+
 			//taking the time before executing query.
 			long startTime = System.currentTimeMillis();
-			String sql="select emp_no from salaries where salary  > " + salary;
+			String sql="select   emp_no  from  salaries use index (sal_salary) where  salary  > " + salary;
 			res = statement.executeQuery(sql);
 			//taking the time after executing query.
 			long endTime = System.currentTimeMillis();
@@ -145,7 +180,7 @@ public class MysqlQueries extends Query {
 			long runTime = endTime - startTime;
 			System.out.println("empNoOfCertainSalary");
 			//printQuery(res);
-			System.out.println("time to execute = " + runTime + " milliseconds");
+			System.out.println("Time to execute = " + runTime + " milliseconds");
 			//printTime(runTime);
 			printQuery(res);
 		}
