@@ -83,13 +83,11 @@ public class MongoQueries extends Query {
 		.start().put("salary").greaterThan(salary).get();
 		
 		DBCursor employees = sColl.find(query);
-		
+		employees.sort(new BasicDBObject("emp_no", 1));
 		
 		long endTime = System.currentTimeMillis();
 		
 		long runTime = endTime - startTime;
-		
-		employees.sort(new BasicDBObject("emp_no", 1));
 		
 		/*
 		 * Because the salaries collection stores Object IDs instead of
