@@ -71,7 +71,7 @@ public class MongoQueries extends Query {
 		rColl.drop();
 		rColl = db.getCollection("result");
 		
-		//Create a new index for the salary field
+		//Create a new index for the from_date field
 		sColl.createIndex(new BasicDBObject("salary", 1));
 		
 		System.out.println("empNoOfCertainSalary");

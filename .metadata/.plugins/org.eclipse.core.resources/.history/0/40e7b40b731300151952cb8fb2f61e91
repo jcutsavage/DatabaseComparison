@@ -71,9 +71,6 @@ public class MongoQueries extends Query {
 		rColl.drop();
 		rColl = db.getCollection("result");
 		
-		//Create a new index for the salary field
-		sColl.createIndex(new BasicDBObject("salary", 1));
-		
 		System.out.println("empNoOfCertainSalary");
 		
 		long startTime = System.currentTimeMillis();

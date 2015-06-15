@@ -1,8 +1,0 @@
-package crud;
-
-public class MySQLCreator extends DBCreator {
-
-	public void initConnection(){
-		
-	}
-}

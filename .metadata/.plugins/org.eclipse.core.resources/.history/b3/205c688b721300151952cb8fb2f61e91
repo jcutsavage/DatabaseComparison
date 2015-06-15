@@ -71,9 +71,6 @@ public class MongoQueries extends Query {
 		rColl.drop();
 		rColl = db.getCollection("result");
 		
-		//Create a new index for the salary field
-		sColl.createIndex(new BasicDBObject("salary", 1));
-		
 		System.out.println("empNoOfCertainSalary");
 		
 		long startTime = System.currentTimeMillis();
@@ -119,7 +116,7 @@ public class MongoQueries extends Query {
 	
 	/**
 	 * Get the average salary of all employees that started after a certain date.
-	 * @param date A date in the YYYY-MM-DD format.
+	 * @param date A date in the yyyy-MM-dd format.
 	 */
 	public void avgSalaryAfterDate(Date date) {
 		rColl.drop();

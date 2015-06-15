@@ -71,9 +71,6 @@ public class MongoQueries extends Query {
 		rColl.drop();
 		rColl = db.getCollection("result");
 		
-		//Create a new index for the salary field
-		sColl.createIndex(new BasicDBObject("salary", 1));
-		
 		System.out.println("empNoOfCertainSalary");
 		
 		long startTime = System.currentTimeMillis();
@@ -119,14 +116,11 @@ public class MongoQueries extends Query {
 	
 	/**
 	 * Get the average salary of all employees that started after a certain date.
-	 * @param date A date in the YYYY-MM-DD format.
+	 * @param date A date in the yyyy-MM-dd format.
 	 */
 	public void avgSalaryAfterDate(Date date) {
 		rColl.drop();
 		rColl = db.getCollection("result");
-		
-		//Create a new index for the from_date field
-		sColl.createIndex(new BasicDBObject("from_date", 1));
 		
 		System.out.println("avgSalaryAfterDate");
 		
@@ -177,24 +171,28 @@ public class MongoQueries extends Query {
 		//Create a cursor of all employees.
 		DBCursor employees = sColl.find();
 		
-		double total = 0;
+		//double total = 0;
 		
 		//Calculate the average of all returned salaries
+		//while(employees.hasNext()){
+		//	total += (Integer)employees.next().get("salary");
+		//}
+		
 		while(employees.hasNext()){
-			total += (Integer)employees.next().get("salary");
+			rColl.insert(employees.next());
 		}
 		
-		double avg = total / employees.count();
+		//double avg = total / employees.count();
 	
 		long endTime = System.currentTimeMillis();
 		
 		long runTime = endTime - startTime;
 		
 		//Insert average value into result collection
-		DBObject avgSalary = new BasicDBObject();
-		avgSalary.put("average_salary", avg);
+		//DBObject avgSalary = new BasicDBObject();
+		//avgSalary.put("average_salary", avg);
 		
-		rColl.insert(avgSalary);
+		//rColl.insert(avgSalary);
 		
 		System.out.println("Time to execute: " + runTime  + "ms");
 		
