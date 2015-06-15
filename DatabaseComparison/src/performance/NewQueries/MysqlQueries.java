@@ -142,7 +142,7 @@ public class newMysql extends newQueries {
 
 	/**
 	 * This method is not used in this implementation. See
-	 * avgSalaryAfterDate(String date).
+	 * avgSalary(String date).
 	 */
 	public void avgSalaryAfterDate(Date date){}
 
