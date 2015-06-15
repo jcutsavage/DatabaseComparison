@@ -30,7 +30,7 @@ public class MysqlQueries extends Query {
 			String userName = "root"; 
 			String password = "mysql";
 			try {
-				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/employees?user=root&password=password");
+				con = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/employees?user=root&password=mysql");
 
 			} catch (Exception e) {
 				e.printStackTrace();
