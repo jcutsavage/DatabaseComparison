@@ -135,22 +135,34 @@ public class MongoQueries extends Query {
 		
 		long startTime = System.currentTimeMillis();
 		
-		DBObject match = new BasicDBObject("$match", new BasicDBObject("from_date", new BasicDBObject("$gt", date)));
-		DBObject groupFields = new BasicDBObject("_id", null);
-		groupFields.put("average", new BasicDBObject("$avg", "$salary"));
-		DBObject group = new BasicDBObject("$group", groupFields);
+		//Build query to find all salaries after a given date
+		DBObject query = new QueryBuilder()
+		.start().put("from_date").greaterThan(date).get();
 		
-		AggregationOutput out = sColl.aggregate(match, group);
-		Iterable<DBObject> results = out.results();
+		DBCursor employees = sColl.find(query);
 		
+		//Calculate the average of all returned salaries
+		double total = 0;
+		
+		while(employees.hasNext()){
+			total += (Integer)employees.next().get("salary");
+		}
+		
+		double avg = total / employees.count();
+	
 		long endTime = System.currentTimeMillis();
 		
 		long runTime = endTime - startTime;
 		
+		//Insert average value into result collection
+		DBObject avgSalary = new BasicDBObject();
+		avgSalary.put("average_salary", avg);
+		
+		rColl.insert(avgSalary);
 		
 		System.out.println("Time to execute: " + runTime  + "ms");
 		
-		System.out.println(results);
+		printQuery();
 		System.out.println();
 	}
 
@@ -165,9 +177,7 @@ public class MongoQueries extends Query {
 		
 		long startTime = System.currentTimeMillis();
 		
-		DBObject groupFields = new BasicDBObject("_id", null);
-		groupFields.put("average", new BasicDBObject("$avg", "$salary"));
-		DBObject group = new BasicDBObject("$group", groupFields);
+		DBObject group = new BasicDBObject("$group", new BasicDBObject("_id", null));
 		
 		AggregationOutput out = sColl.aggregate(group);
 		Iterable<DBObject> results = out.results();
@@ -176,8 +186,15 @@ public class MongoQueries extends Query {
 		
 		long runTime = endTime - startTime;
 		
+		//Insert average value into result collection
+		//DBObject avgSalary = new BasicDBObject();
+		//avgSalary.put("average_salary", null);
+		
+		//rColl.insert(avgSalary);
+		
 		System.out.println("Time to execute: " + runTime  + "ms");
 		
+		//printQuery();
 		System.out.println(results);
 		System.out.println();
 	}

@@ -135,7 +135,7 @@ public class MongoQueries extends Query {
 		
 		long startTime = System.currentTimeMillis();
 		
-		DBObject match = new BasicDBObject("$match", new BasicDBObject("from_date", new BasicDBObject("$gt", date)));
+		DBObject match = new BasicDBObject("$match", new BasicDBObject("$salaries.from_date", new BasicDBObject("$gt", date)));
 		DBObject groupFields = new BasicDBObject("_id", null);
 		groupFields.put("average", new BasicDBObject("$avg", "$salary"));
 		DBObject group = new BasicDBObject("$group", groupFields);

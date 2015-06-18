@@ -135,13 +135,7 @@ public class MongoQueries extends Query {
 		
 		long startTime = System.currentTimeMillis();
 		
-		DBObject match = new BasicDBObject("$match", new BasicDBObject("from_date", new BasicDBObject("$gt", date)));
-		DBObject groupFields = new BasicDBObject("_id", null);
-		groupFields.put("average", new BasicDBObject("$avg", "$salary"));
-		DBObject group = new BasicDBObject("$group", groupFields);
-		
-		AggregationOutput out = sColl.aggregate(match, group);
-		Iterable<DBObject> results = out.results();
+		DBObject match = new BasicDBObject("$match", new BasicDBObject("salaries.salary", new BasicDBObject("$gt", date)));
 		
 		long endTime = System.currentTimeMillis();
 		
@@ -150,7 +144,7 @@ public class MongoQueries extends Query {
 		
 		System.out.println("Time to execute: " + runTime  + "ms");
 		
-		System.out.println(results);
+		System.out.println();
 		System.out.println();
 	}
 
