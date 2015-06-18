@@ -198,10 +198,5 @@ public class MongoQueries extends Query {
 			System.out.println(print.next());
 		}
 	}
-	
-	/**
-	 * This method is filler for this version.
-	 */
-	public void resetCache(){}
 
 }

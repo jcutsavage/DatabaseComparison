@@ -199,9 +199,6 @@ public class MongoQueries extends Query {
 		}
 	}
 	
-	/**
-	 * This method is filler for this version.
-	 */
 	public void resetCache(){}
 
 }

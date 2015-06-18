@@ -9,6 +9,6 @@ public abstract class Query {
 	public abstract void avgSalary(String date);
 	public abstract void avgSalaryAfterDate(Date date);
 	public abstract void avgSalary();
-	public abstract void resetCache();
+	
 	
 }

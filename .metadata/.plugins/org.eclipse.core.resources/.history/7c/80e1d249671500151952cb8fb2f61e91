@@ -189,15 +189,14 @@ public class MysqlQueries extends Query {
 		}
 	}
 	
-	/**
-	 * Reset the query cache for MySQL so queries can
-	 * be timed as if they were being run for the first time.
-	 */
 	public void resetCache(){
 		try{
 			Statement statement = con.createStatement();
-			String sql="flush tables";
+			//taking the time before executing query.
+			long startTime = System.currentTimeMillis();
+			String sql="select  avg(salary) from salaries";
 			res = statement.executeQuery(sql);
+			//taking the time after executing query.
 		}
 		catch (Exception e){
 			e.printStackTrace();

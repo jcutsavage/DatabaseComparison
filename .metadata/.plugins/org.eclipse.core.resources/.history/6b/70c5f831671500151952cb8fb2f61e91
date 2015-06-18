@@ -188,20 +188,5 @@ public class MysqlQueries extends Query {
 			e.printStackTrace();
 		}
 	}
-	
-	/**
-	 * Reset the query cache for MySQL so queries can
-	 * be timed as if they were being run for the first time.
-	 */
-	public void resetCache(){
-		try{
-			Statement statement = con.createStatement();
-			String sql="flush tables";
-			res = statement.executeQuery(sql);
-		}
-		catch (Exception e){
-			e.printStackTrace();
-		}
-	}
 
 }
