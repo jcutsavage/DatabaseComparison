@@ -24,6 +24,7 @@ public class Driver{
 	
 		int salary = 150000;
 		sqlQuery.empNoOfCertainSalary(salary);
+		sqlQuery.empNameAndSalary();
 		
 		Query mongoQuery = new MongoQueries();
 		mongoQuery.initConnection();
