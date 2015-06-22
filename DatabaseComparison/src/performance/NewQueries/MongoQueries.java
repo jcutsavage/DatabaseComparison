@@ -121,6 +121,12 @@ public class MongoQueries extends Query {
 	public void avgSalary(String date) {}
 	
 	/**
+	 * 
+	 * This method is not used for this implementation.
+	 */
+	public void empNameAndSalary() {}
+	
+	/**
 	 * Get the average salary of all employees that started after a certain date.
 	 * @param date A date in the YYYY-MM-DD format.
 	 */
