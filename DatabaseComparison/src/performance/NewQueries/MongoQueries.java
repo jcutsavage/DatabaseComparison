@@ -152,27 +152,27 @@ public class MongoQueries extends Query {
 				.build();
 
 		/* 
-		 * using cursor to go through the salaries collection sColl in order to find the employee's first and last
-		 * name from eColl, 
+		 * using cursor to go through the employees collection sColl in order to find the employee's first and last
+		 * name and max(salary)from eColl,and sColl. 
 		 */
 		DBObject currentEmp= null;
 		DBObject findEmp=new BasicDBObject("last_name", "Simmel");
 		Cursor employees=eColl.find(findEmp);
-		//Cursor em=eColl.find();
+		
 		try{
 			while(employees.hasNext())
 			{
 				currentEmp=employees.next();
 
 
-				//getting the employee object by matching the emp_no with employee collection's _id field.
+				// matching salaries's emp_no with employee collection's _id field.(by calling aggregate on sColl later) 
 				//(using reference from employees to salaries collection).   
 				match.put("$match", (new BasicDBObject("emp_no", currentEmp.get("_id"))));
 
 
 				// build the $projection operation
 				fields.put("salary", 1);
-				//projecting the fields we want to see.
+				//projecting the fields we want to see. 
 				project.put("$project", fields );
 
 				//Now the $group operation
@@ -185,7 +185,7 @@ public class MongoQueries extends Query {
 
 				Cursor cur=sColl.aggregate(pipelineManager, cursorAggregate);
 
-				//using cursor to match the field we ]
+				//using cursor to match the field we want to see.
 
 				DBObject currentCur= null;
 				while (cur.hasNext()){
