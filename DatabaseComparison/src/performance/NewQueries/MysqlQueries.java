@@ -228,9 +228,9 @@ public class MysqlQueries extends Query {
 			//taking the time before executing query.
 			long startTime = System.currentTimeMillis();
 			//the query to find the first name, last name and salary of each employee with both indexes
-			String sql="select e.first_name, e.last_name, s.salary from employees as e "
-					+ "use index(emp_emp_no) inner join salaries as s use index(sal_emp_no) "
-					+ "on e.emp_no= s.emp_no";
+			String sql="select e.first_name, e.last_name, max(s.salary) from employees as e "
+					+ "use index(emp_emp_no) inner join salaries as s use index(sal_from_date) "
+					+ "on e.emp_no= s.emp_no and e.last_name= 'simmel' group by e.first_name, e.last_name";
 			res = statement.executeQuery(sql);
 			//taking the time after executing query.
 			long endTime = System.currentTimeMillis();
@@ -238,13 +238,15 @@ public class MysqlQueries extends Query {
 			long runTime = endTime - startTime;
 			System.out.println("empNameAndSalary with Index on both employees and salaries tables");
 			System.out.println("Time to execute = " + runTime + " milliseconds\n");
+			printQuery(res);
 
 			//Evaluating execution time with one Index...
 			//taking the time before executing query.
 			long startTime1 = System.currentTimeMillis();
 			//the query to find the first name, last name and salary of each employee with index on employees.
-			String sql1="select e.first_name, e.last_name, s.salary from employees as e use index(emp_emp_no)"
-					+ " inner join salaries as s on e.emp_no= s.emp_no";
+			String sql1="select e.first_name, e.last_name, max(s.salary) from employees as e use index(emp_emp_no)"
+					+ " inner join salaries as s on e.emp_no= s.emp_no and e.last_name= 'simmel' "
+					+ "group by e.first_name, e.last_name";
 			ResultSet res1= statement.executeQuery(sql1);
 			//taking the time after executing query.
 			long endTime1 = System.currentTimeMillis();
@@ -252,13 +254,15 @@ public class MysqlQueries extends Query {
 			long runTime1 = endTime1 - startTime1;
 			System.out.println("empNameAndSalary with Index on only employees table");
 			System.out.println("Time to execute = " + runTime1 + " milliseconds\n");
+			printQuery(res1);
 
 			//Evaluating execution time without any indexes...
 			//taking the time before executing query.
 			long startTime2 = System.currentTimeMillis();
 			//the query to find the first name, last name and salary of each employee without using any index.
-			String sql2="select e.first_name, e.last_name, s.salary from employees as e "
-					+ " inner join salaries as s on e.emp_no= s.emp_no";
+			String sql2="select e.first_name, e.last_name, max(s.salary) from employees as e "
+					+ " inner join salaries as s on e.emp_no= s.emp_no and e.last_name= 'simmel' "
+					+ "group by e.first_name, e.last_name";
 			ResultSet res2= statement.executeQuery(sql2);
 			//taking the time after executing query.
 			long endTime2 = System.currentTimeMillis();
@@ -266,7 +270,7 @@ public class MysqlQueries extends Query {
 			long runTime2 = endTime2 - startTime2;
 			System.out.println("empNameAndSalary without any Indexes");
 			System.out.println("Time to execute = " + runTime2 + " milliseconds\n");
-
+			printQuery(res2);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
