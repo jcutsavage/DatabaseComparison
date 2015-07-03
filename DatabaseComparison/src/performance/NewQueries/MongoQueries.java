@@ -122,9 +122,97 @@ public class MongoQueries extends Query {
 	
 	/**
 	 * 
-	 * This method is not used for this implementation.
+	 * This method prints the first name, last name and max(salary) of an employee which requires joining 
+	 * two collections.
 	 */
-	public void empNameAndSalary() {}
+	public void empNameAndSalary() {
+
+		BasicDBObject result=new BasicDBObject();
+		DBObject fields = new BasicDBObject();
+		DBObject project = new BasicDBObject();
+		DBObject match = new BasicDBObject();
+		DBObject groupFields = new BasicDBObject();
+		DBObject group = new BasicDBObject();
+		List<DBObject> pipelineManager= null;
+
+		rColl.drop();
+		rColl = db.getCollection("result");
+		//Create a new index for the salary field
+
+		eColl.createIndex( new BasicDBObject("last_name", 1));
+		sColl.createIndex(new BasicDBObject("salary", 1));
+		System.out.println("empNameAndSalary(Mongodb)");
+
+		long begin=System.currentTimeMillis();
+
+		AggregationOptions cursorAggregate = AggregationOptions.builder()
+				.batchSize(100)
+				.outputMode(AggregationOptions.OutputMode.CURSOR)
+				.allowDiskUse(true)
+				.build();
+
+		/* 
+		 * using cursor to go through the salaries collection sColl in order to find the employee's first and last
+		 * name from eColl, 
+		 */
+		DBObject currentEmp= null;
+		DBObject findEmp=new BasicDBObject("last_name", "Simmel");
+		Cursor employees=eColl.find(findEmp);
+		//Cursor em=eColl.find();
+		try{
+			while(employees.hasNext())
+			{
+				currentEmp=employees.next();
+
+
+				//getting the employee object by matching the emp_no with employee collection's _id field.
+				//(using reference from employees to salaries collection).   
+				match.put("$match", (new BasicDBObject("emp_no", currentEmp.get("_id"))));
+
+
+				// build the $projection operation
+				fields.put("salary", 1);
+				//projecting the fields we want to see.
+				project.put("$project", fields );
+
+				//Now the $group operation
+				groupFields.put( "_id", "$emp_no");
+				groupFields.put("salary",(new BasicDBObject("$max", "$salary")));
+				group.put("$group", groupFields);
+
+				// run aggregation
+				pipelineManager = Arrays.asList(match, project, group);
+
+				Cursor cur=sColl.aggregate(pipelineManager, cursorAggregate);
+
+				//using cursor to match the field we ]
+
+				DBObject currentCur= null;
+				while (cur.hasNext()){
+					currentCur= cur.next();
+					result.clear();
+					result.put("first_name", currentEmp.get("first_name"));
+					result.put("last_name", currentEmp.get("last_name"));
+					result.put("salary", currentCur.get("salary"));
+					rColl.insert(result);
+
+				}
+
+			}
+
+			long end=System.currentTimeMillis();
+			System.out.println("Time to execute = " + Long.toString(end-begin) + " MilliSeconds" );
+			printQuery();
+			System.out.println();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Error:"+e.getMessage());
+
+		}
+
+	}
+
 	
 	/**
 	 * Get the average salary of all employees that started after a certain date.
