@@ -31,8 +31,8 @@ public class Driver {
 
 		mysqlInsert.insertEmployee(emp_no,eSalary, fDateFormated, tDateFormated);
 		
-		mysqlInsert.updateEmployee(32197, 569832,"1958-08-06", "1997-07-05", "2006-04-07");
-		mysqlInsert.deleteEmployee(32197, "1997-07-05");
+		mysqlInsert.updateEmployee(emp_no, 569832,"1958-08-06", "1997-07-05", "2006-04-07");
+		mysqlInsert.deleteEmployee(emp_no, "1997-07-05");
 	  
 	}  
 }
