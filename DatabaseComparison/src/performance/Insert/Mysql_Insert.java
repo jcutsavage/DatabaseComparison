@@ -6,7 +6,7 @@ import java.sql.Statement;
 import java.util.Date;
 
 
-public class Mysql_Insert extends Abs_Insert {
+public class Mysql_Insert extends InsertRecord {
 	Connection con;
 	
 	/**
