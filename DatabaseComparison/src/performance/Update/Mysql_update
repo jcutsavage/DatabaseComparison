@@ -1,3 +1,4 @@
+package performance.Update;
 import java.sql.*;
 import java.io.*;
 import java.util.*;
@@ -21,8 +22,9 @@ public class Mysql_update extends Abs_update{
 		} finally{}
 	}
 
-  public void updateEmployee(int emp_no, int salary, int newSalary, String fromDate, String toDate){
-    initConnection();
+  	public void updateEmployee(int emp_no, int salary, int newSalary, String fromDate, String toDate){
+
+		initConnection();
 		try {
 			//taking the time before executing query.
 			long startTime = System.currentTimeMillis();
@@ -64,11 +66,10 @@ public class Mysql_update extends Abs_update{
 
 	}
 
-	
-  @Override
+ 	@Override
 	public void updateEmployee(int emp_no, int salary, int newSalary,
 			Date fromDate, Date toDate) {
 		// TODO Auto-generated method stub
 		
-	}	 
+	}	 	 
 }	
