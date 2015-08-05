@@ -1,6 +1,6 @@
 
-package performance.Update
-import java.util.Date
+package performance.Update;
+import java.util.Date;
 
 public abstract class Abs_update {
 	
