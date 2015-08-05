@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class MysqlJavaAPI {
+public class Driver {
 
 	public static void main(String[] args) throws SQLException, ParseException {
 	
@@ -30,16 +30,16 @@ public class MysqlJavaAPI {
 		int emp_no= 32197;
 		int eSalary= 671950;
 		int newSalary= 1000000;
-		//mysqlCrud.insertEmployee(emp_no, eSalary, fDateFormated, tDateFormated);
+	
 		mysqlCrud.updateEmployee(emp_no, eSalary, newSalary, fDateFormated, tDateFormated);
-		//mysqlCrud.deleteEmployee(emp_no, newSalary);
+		
 		
 
 		//Mongo crud_actions...
 		MongoCrudActions mongoCrud = new MongoCrudActions();
 		mongoCrud.initConnection();
-		//mongoCrud.insertEmployee(emp_no, eSalary, fDate, tDate);
-		//mongoCrud.updateEmployee(emp_no, eSalary,newSalary, fDate, tDate);
-		//mongoCrud.deleteEmployee(emp_no, newSalary);
+		
+		mongoCrud.updateEmployee(emp_no, eSalary,newSalary, fDate, tDate);
+	
 	}	
 }
