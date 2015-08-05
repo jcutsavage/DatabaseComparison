@@ -3,7 +3,7 @@ import java.io.*;
 import java.util.*;
 import java.util.Date;
 
-public class MysqlCrudActions extends abs_crud_actions{
+public class Mysql_update extends Abs_update{
 	Connection con;
 	public void initConnection(){
 		try{
