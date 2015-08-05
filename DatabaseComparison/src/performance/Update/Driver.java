@@ -15,7 +15,7 @@ public class Driver {
 	public static void main(String[] args) throws SQLException, ParseException {
 	
 		// Mysql crud_actions...
-		abs_crud_actions mysqlCrud = new MysqlCrudActions();
+		Abs_update mysqlCrud = new Mysql_update();
 		mysqlCrud.initConnection();
 		
 		String from = "1958-08-06";
@@ -37,7 +37,7 @@ public class Driver {
 		
 
 		//Mongo crud_actions...
-		MongoCrudActions mongoCrud = new MongoCrudActions();
+		Abs_update mongoCrud = new Mongo_update();
 		mongoCrud.initConnection();
 		
 		mongoCrud.updateEmployee(emp_no, eSalary,newSalary, fDate, tDate);
