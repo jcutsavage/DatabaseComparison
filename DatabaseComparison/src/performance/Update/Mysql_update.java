@@ -65,6 +65,19 @@ public class Mysql_update extends Abs_update{
 		}
 
 	}
+	
+	public void flush(){
+		Statement statement;
+		try {
+			statement= con.createStatement();
+			String sql= "reset query cache";
+			statement.execute(sql);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}	
 
  	@Override
 	public void updateEmployee(int emp_no, int salary, int newSalary,
