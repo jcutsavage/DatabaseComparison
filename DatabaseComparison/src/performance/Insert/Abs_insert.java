@@ -2,7 +2,7 @@ package performance.Insert;
 
 import java.util.Date;
 
-public abstract class InsertRecord
+public abstract class Abs_insert
 
 {
 	public void executeQuery(){}
