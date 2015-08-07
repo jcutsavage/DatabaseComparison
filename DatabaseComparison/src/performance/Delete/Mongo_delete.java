@@ -32,4 +32,52 @@ public class Mongo_delete extends Abs_delete {
 		{
 			System.out.println(e.getMessage());
 		}
+
 	}
+	
+	//Delete a document of the salaries table using the keys emp_no and salary.
+	//@param employee number and salary.
+	public void deleteEmployee(int emp_no, int salary) { 
+		//taking the time before executing query.
+		long startTime = System.currentTimeMillis();
+
+		BasicDBObject findID = new BasicDBObject();
+		findID.put("emp_no", emp_no);
+		DBCursor cursor = eColl.find(findID);
+		while(cursor.hasNext()) {
+			DBObject currentEmp=cursor.next();
+			Object id=currentEmp.get("_id");
+
+			BasicDBObject findDocs = new BasicDBObject();
+			findDocs.put("emp_no", id);
+			findDocs.put("salary", salary);
+			DBCursor curDelete = sColl.find(findDocs);
+			if (curDelete.hasNext()){
+				DBObject currDoc= curDelete.next();
+				sColl.remove(currDoc);
+			}
+			else{
+				System.err.println("error while deleting: no such document");
+			}
+		}
+		//taking the time after executing query.
+		long endTime = System.currentTimeMillis();
+
+		//time takes to execute query.
+		long runTime = endTime - startTime;
+		System.out.println();
+		System.out.println("(Delete) Time to execute = " + runTime + " milliseconds");
+	}
+
+	@Override
+	public void flush() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteEmployee(int emp_no, int salary, String fromDate) {
+		// TODO Auto-generated method stub
+		
+	}
+}
