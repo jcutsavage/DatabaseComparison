@@ -1,4 +1,4 @@
-package performance.Insert;
+package performance.Delete;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,9 +13,7 @@ import java.util.Locale;
 public class Driver {
 
 	public static void main(String[] args) throws SQLException, ParseException {
-	  InsertRecord mysqlInsert = new MysqlInsert();
-		mysqlInsert.initConnection();
-		
+	
 		String from = "1958-08-06";
 		DateFormat fDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date fDate = fDateFormat.parse(from);
@@ -27,12 +25,18 @@ public class Driver {
 		String tDateFormated=tDateFormat.format(tDate );
 		
 		int emp_no= 32197;
-		int eSalary= 678950;
-
-		mysqlInsert.insertEmployee(emp_no,eSalary, fDateFormated, tDateFormated);
+		int eSalary= 671950;
 		
-	//	mysqlInsert.updateEmployee(emp_no, 569832,"1958-08-06", "1997-07-05", "2006-04-07");
-	//	mysqlInsert.deleteEmployee(emp_no, "1997-07-05");
-	  
-	}  
+		//Mysql...
+		Abs_insert mysqlCrud = new Mysql_insert();
+		mysqlCrud.initConnection();
+		mysqlCrud.insertEmployee(emp_no, eSalary, fDateFormated, tDateFormated);
+		mysqlCrud.flush();
+		
+		//Mongo...
+		mongoCrud.initConnection();
+		abs_insert mongoCrud = new Mongo_insert();
+		mongoCrud.insertEmployee(emp_no, eSalary, fDate, tDate);
+	
+	}	
 }
