@@ -1,12 +1,11 @@
 package performance.Insert;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.Date;
 
 
-public class MysqlInsert extends InsertRecord {
+public class Mysql_insert extends Abs_insert {
 	Connection con;
 	
 	/**
@@ -44,14 +43,11 @@ public class MysqlInsert extends InsertRecord {
 			//taking the time before executing query.
 			long startTime = System.currentTimeMillis();
 			
-			String sql = "INSERT INTO salaries (emp_no, salary, from_date, to_date) values(" + emp_no + ","
+			String sql1 = "INSERT INTO salaries (emp_no, salary, from_date, to_date) values(" + emp_no + ","
 					+  salary + ",'" + fromDate + "', '" + toDate + "')";
-			
 			Statement statement;
-
 			statement = con.createStatement();
-
-			statement.executeUpdate(sql); 
+			statement.executeUpdate(sql1); 
 
 			//taking the time after executing query.
 			long endTime = System.currentTimeMillis();
@@ -62,9 +58,30 @@ public class MysqlInsert extends InsertRecord {
 			System.out.println("Time to execute = " + runTime + " milliseconds");        
 
 		} catch (SQLException e) {
-			  // TODO Auto-generated catch block
-			  e.printStackTrace();
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}	 
 
+	//Reseting cache..
+	public void flush(){
+		Statement statement;
+		try {
+			statement= con.createStatement();
+			String sql= "reset query cache";
+			statement.execute(sql);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	@Override
+	public void insertEmployee(int emp_no, int salary, Date fromDate,
+			Date toDate) {
+		// TODO Auto-generated method stub
+		
+	}
 }	
