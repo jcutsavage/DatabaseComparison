@@ -10,8 +10,7 @@ import java.util.Date;
 import java.util.Locale;
 
 
-public class MysqlJavaAPI {
-
+public class Driver {
 	public static void main(String[] args) throws SQLException, ParseException {
 		
 		int emp_no= 32197;
@@ -20,7 +19,8 @@ public class MysqlJavaAPI {
 		// Mysql crud_actions...
 		Abs_delete mysqlCrud = new Mysql_delete();
 		mysqlCrud.initConnection();
-		mysqlCrud.deleteEmployee(emp_no, newSalary);
+		mysqlCrud.deleteEmployee(emp_no, newSalary, fDateFormated);
+		mysqlCrud.flush();
 		
 		//Mongo crud_actions...
 		Abs_delete mongoCrud = new Mongo_delete();
