@@ -21,7 +21,9 @@ public class Mysql_update extends Abs_update{
 			}	  
 		} finally{}
 	}
-
+	
+	//updating a record's salary of which the emp_no, salary and from_date will match with the parameters.w
+	//@param employee number,old salary, new salary, from_date and to_date.
   	public void updateEmployee(int emp_no, int salary, int newSalary, String fromDate, String toDate){
 
 		initConnection();
@@ -66,6 +68,7 @@ public class Mysql_update extends Abs_update{
 
 	}
 	
+	//reseting the cache...
 	public void flush(){
 		Statement statement;
 		try {
