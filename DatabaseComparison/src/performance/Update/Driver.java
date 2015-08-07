@@ -14,10 +14,6 @@ public class Driver {
 
 	public static void main(String[] args) throws SQLException, ParseException {
 	
-		// Mysql crud_actions...
-		Abs_update mysqlCrud = new Mysql_update();
-		mysqlCrud.initConnection();
-		
 		String from = "1958-08-06";
 		DateFormat fDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		Date fDate = fDateFormat.parse(from);
@@ -32,14 +28,16 @@ public class Driver {
 		int eSalary= 671950;
 		int newSalary= 1000000;
 	
+		// Mysql...
+		Abs_update mysqlCrud = new Mysql_update();
+		mysqlCrud.initConnection();
 		mysqlCrud.updateEmployee(emp_no, eSalary, newSalary, fDateFormated, tDateFormated);
-		
+		mysqlCrud.flush();
 		
 
-		//Mongo crud_actions...
+		//Mongo...
 		Abs_update mongoCrud = new Mongo_update();
 		mongoCrud.initConnection();
-		
 		mongoCrud.updateEmployee(emp_no, eSalary,newSalary, fDate, tDate);
 	
 	}	
