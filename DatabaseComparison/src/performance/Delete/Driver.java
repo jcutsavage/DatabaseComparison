@@ -16,13 +16,13 @@ public class Driver {
 		int emp_no= 32197;
 		int newSalary= 1000000;
 		
-		// Mysql crud_actions...
+		// Mysql...
 		Abs_delete mysqlCrud = new Mysql_delete();
 		mysqlCrud.initConnection();
 		mysqlCrud.deleteEmployee(emp_no, newSalary, fDateFormated);
 		mysqlCrud.flush();
 		
-		//Mongo crud_actions...
+		//Mongo...
 		Abs_delete mongoCrud = new Mongo_delete();
 		mongoCrud.initConnection();
 		mongoCrud.deleteEmployee(emp_no, newSalary);
