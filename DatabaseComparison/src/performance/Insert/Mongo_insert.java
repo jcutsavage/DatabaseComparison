@@ -1,4 +1,4 @@
-package 
+package performance.Insert;
 import java.util.Date;
 import com.mongodb.BasicDBObject;
 import com.meongodb.DBCollection;
